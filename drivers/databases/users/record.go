@@ -4,10 +4,11 @@ import (
 	"time"
 
 	"github.com/Rahmanwghazi/Monefy/business/users"
+	"gorm.io/gorm"
 )
 
 type User struct {
-	//gorm.Model
+	gorm.Model
 	Username string `gorm:"unique"`
 	Email    string `gorm:"unique"`
 	Password string
@@ -17,7 +18,7 @@ type User struct {
 
 func (user *User) ToDomain() users.Domain {
 	return users.Domain{
-		//Model:    gorm.Model{},
+		Model:    gorm.Model{},
 		Username: user.Username,
 		Email:    user.Email,
 		Password: user.Password,
@@ -28,7 +29,7 @@ func (user *User) ToDomain() users.Domain {
 
 func FromDomain(domain users.Domain) User {
 	return User{
-		//Model:    gorm.Model{},
+		Model:    gorm.Model{},
 		Username: domain.Username,
 		Email:    domain.Email,
 		Password: domain.Password,

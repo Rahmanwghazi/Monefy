@@ -3,17 +3,18 @@ package users
 import (
 	"context"
 	"time"
-	//"gorm.io/gorm"
+
+	"gorm.io/gorm"
 )
 
 type Domain struct {
-	//gorm.Model
+	gorm.Model
 	Username string
 	Email    string
 	Password string
 	FullName string
 	DoB      time.Time
-	//	Token    string
+	Token    string
 }
 
 type Usecase interface {

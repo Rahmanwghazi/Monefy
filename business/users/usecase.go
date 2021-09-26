@@ -35,7 +35,7 @@ func (usecase *UserUsecase) Signup(context context.Context, user Domain) (Domain
 		return Domain{}, errors.New("Fullname can't be empty")
 	}
 
-	user, err := usecase.Signup(context, user)
+	user, err := usecase.Repo.Signup(context, user)
 
 	if err != nil {
 		return Domain{}, err
@@ -46,13 +46,13 @@ func (usecase *UserUsecase) Signup(context context.Context, user Domain) (Domain
 
 func (usecase *UserUsecase) Signin(context context.Context, username string, password string) (Domain, error) {
 	if username == "" {
-		return Domain{}, errors.New("Email can't be empty")
+		return Domain{}, errors.New("Username can't be empty")
 	}
 	if password == "" {
 		return Domain{}, errors.New("Password can't be empty")
 	}
 
-	user, err := usecase.Signin(context, username, password)
+	user, err := usecase.Repo.Signin(context, username, password)
 
 	if err != nil {
 		return Domain{}, err

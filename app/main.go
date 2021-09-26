@@ -26,10 +26,7 @@ func init() {
 	}
 }
 func DBMigration(db *gorm.DB) {
-	err := db.AutoMigrate(&_userDB.User{})
-	if err != nil {
-		panic(err)
-	}
+	db.AutoMigrate(&_userDB.User{})
 }
 
 func main() {

@@ -4,13 +4,11 @@ import (
 	"time"
 
 	"github.com/Rahmanwghazi/Monefy/business/users"
-	//"gorm.io/gorm"
 )
 
 type UserSignup struct {
-	//gorm.Model
 	Username string    `json:"username" gorm:"unique"`
-	Email    string    `json:"email" gorm:"unique"`
+	Email    string    `json:"email"    gorm:"unique"`
 	Password string    `json:"password"`
 	FullName string    `json:"fullname"`
 	DoB      time.Time `json:"dob"`
