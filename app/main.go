@@ -4,6 +4,7 @@ import (
 	"log"
 	"time"
 
+	"github.com/Rahmanwghazi/Monefy/app/middlewares"
 	"github.com/Rahmanwghazi/Monefy/app/routes"
 	_userUseCase "github.com/Rahmanwghazi/Monefy/business/users"
 	_userController "github.com/Rahmanwghazi/Monefy/controllers/users"
@@ -38,6 +39,11 @@ func main() {
 		DB_Database: viper.GetString(`database.name`),
 	}
 
+	configJWT := middlewares.ConfigJWT{
+		SecretJwt:       viper.GetString("jwt.secret"),
+		ExpiredDuration: viper.GetInt("jwt.expired"),
+	}
+
 	connection := configDB.InitialDB()
 	DBMigration(connection)
 
@@ -45,10 +51,11 @@ func main() {
 	timeoutContext := time.Duration(viper.GetInt("context.timeout")) * time.Second
 
 	userRepository := _userRepository.NewMysqlUserRepository(connection)
-	userUseCase := _userUseCase.NewUserUsecase(userRepository, timeoutContext)
+	userUseCase := _userUseCase.NewUserUsecase(userRepository, timeoutContext, configJWT)
 	userController := _userController.NewUserController(userUseCase)
 
 	routesInit := routes.ControllerList{
+		JWTMiddleware:  configJWT.Init(),
 		UserController: *userController,
 	}
 

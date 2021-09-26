@@ -36,7 +36,8 @@ func (rep *mysqlUserRepository) Signup(context context.Context, domain users.Dom
 
 func (repository *mysqlUserRepository) Signin(context context.Context, username string, password string) (users.Domain, error) {
 	var user User
-	err := repository.Connection.Where("username = ? AND password = ?", username, password).First(&user).Error
+	err := repository.Connection.First(&user, "username = ? AND password = ?", username, password).Error
+
 	if err != nil {
 		return users.Domain{}, err
 	}
