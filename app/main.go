@@ -2,7 +2,6 @@ package main
 
 import (
 	"log"
-	"time"
 
 	"github.com/Rahmanwghazi/Monefy/app/middlewares"
 	"github.com/Rahmanwghazi/Monefy/app/routes"
@@ -55,14 +54,13 @@ func main() {
 	DBMigration(connection)
 
 	echo := echo.New()
-	timeoutContext := time.Duration(viper.GetInt("context.timeout")) * time.Second
 
 	userRepository := _userRepository.NewMysqlUserRepository(connection)
-	userUseCase := _userUseCase.NewUserUsecase(userRepository, timeoutContext, configJWT)
+	userUseCase := _userUseCase.NewUserUsecase(userRepository, &configJWT)
 	userController := _userController.NewUserController(userUseCase)
 
 	incomeRepository := _incomeRepository.NewMysqlIncomeRepository(connection)
-	incomeUseCase := _incomeUseCase.NewIncomeUsecase(incomeRepository, timeoutContext)
+	incomeUseCase := _incomeUseCase.NewIncomeUsecase(incomeRepository)
 	incomeController := _incomeController.NewIncomeController(incomeUseCase)
 
 	routesInit := routes.ControllerList{

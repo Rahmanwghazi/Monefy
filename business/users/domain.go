@@ -1,7 +1,6 @@
 package users
 
 import (
-	"context"
 	"time"
 
 	"gorm.io/gorm"
@@ -18,11 +17,11 @@ type UserDomain struct {
 }
 
 type Usecase interface {
-	Signup(context context.Context, domain UserDomain) (UserDomain, error)
-	Signin(context context.Context, username string, password string) (UserDomain, error)
+	Signup(domain *UserDomain) (UserDomain, error)
+	Signin(username string, password string) (UserDomain, error)
 }
 
 type Repository interface {
-	Signup(context context.Context, domain UserDomain) (UserDomain, error)
-	Signin(context context.Context, username string, password string) (UserDomain, error)
+	Signup(domain *UserDomain) (UserDomain, error)
+	Signin(username string, password string) (UserDomain, error)
 }

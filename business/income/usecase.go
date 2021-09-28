@@ -1,35 +1,20 @@
 package income
 
-import (
-	"context"
-	"errors"
-	"time"
-)
-
 type IncomeUsecase struct {
-	Repo           Repository
-	contextTimeout time.Duration
+	Repo Repository
 }
 
-func NewIncomeUsecase(repository Repository, timeout time.Duration) Usecase {
+func NewIncomeUsecase(repository Repository) Usecase {
 	return &IncomeUsecase{
-		Repo:           repository,
-		contextTimeout: timeout,
+		Repo: repository,
 	}
 }
 
-func (usecase *IncomeUsecase) Create(context context.Context, income IncomeDomain) (IncomeDomain, error) {
-	if income.Description == "" {
-		return IncomeDomain{}, errors.New("Description can't be empty")
-	}
-	if income.Total == 0 {
-		return IncomeDomain{}, errors.New("Income can't be 0")
-	}
-
-	income, err := usecase.Repo.Create(context, income)
+func (usecase *IncomeUsecase) Create(userId uint, income *IncomeDomain) (IncomeDomain, error) {
+	income.UserID = userId
+	result, err := usecase.Repo.Create(income)
 	if err != nil {
 		return IncomeDomain{}, err
 	}
-
-	return income, nil
+	return result, nil
 }

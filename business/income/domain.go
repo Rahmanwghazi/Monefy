@@ -1,22 +1,20 @@
 package income
 
 import (
-	"context"
-
 	"gorm.io/gorm"
 )
 
 type IncomeDomain struct {
 	gorm.Model
-	UserID      int
+	UserID      uint
 	Total       int
 	Description string
 }
 
 type Usecase interface {
-	Create(context context.Context, domain IncomeDomain) (IncomeDomain, error)
+	Create(userId uint, domain *IncomeDomain) (IncomeDomain, error)
 }
 
 type Repository interface {
-	Create(context context.Context, domain IncomeDomain) (IncomeDomain, error)
+	Create(domain *IncomeDomain) (IncomeDomain, error)
 }

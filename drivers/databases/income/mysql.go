@@ -1,8 +1,6 @@
 package income
 
 import (
-	"context"
-
 	"github.com/Rahmanwghazi/Monefy/business/income"
 	"gorm.io/gorm"
 )
@@ -17,7 +15,7 @@ func NewMysqlIncomeRepository(connection *gorm.DB) income.Repository {
 	}
 }
 
-func (rep *mysqlIncomeRepository) Create(context context.Context, domain income.IncomeDomain) (income.IncomeDomain, error) {
+func (rep *mysqlIncomeRepository) Create(domain *income.IncomeDomain) (income.IncomeDomain, error) {
 	incomeData := Income{}
 	incomeData.Total = domain.Total
 	incomeData.Description = domain.Description

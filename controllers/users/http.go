@@ -28,8 +28,7 @@ func (userController UserController) Signup(echoContext echo.Context) error {
 		return controllers.NewErrorResponse(echoContext, http.StatusInternalServerError, err)
 	}
 
-	context := echoContext.Request().Context()
-	user, err := userController.UserUseCase.Signup(context, userSignup.ToDomain())
+	user, err := userController.UserUseCase.Signup(userSignup.ToDomain())
 
 	if err != nil {
 		return controllers.NewErrorResponse(echoContext, http.StatusBadRequest, err)
@@ -45,8 +44,7 @@ func (userController UserController) Signin(echoContext echo.Context) error {
 		return controllers.NewErrorResponse(echoContext, http.StatusInternalServerError, err)
 	}
 
-	context := echoContext.Request().Context()
-	user, err := userController.UserUseCase.Signin(context, userSignin.Username, userSignin.Password)
+	user, err := userController.UserUseCase.Signin(userSignin.Username, userSignin.Password)
 	if err != nil {
 		return controllers.NewErrorResponse(echoContext, http.StatusBadRequest, err)
 	}

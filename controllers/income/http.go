@@ -3,6 +3,7 @@ package income
 import (
 	"net/http"
 
+	"github.com/Rahmanwghazi/Monefy/app/middlewares"
 	"github.com/Rahmanwghazi/Monefy/business/income"
 	"github.com/Rahmanwghazi/Monefy/controllers"
 	"github.com/Rahmanwghazi/Monefy/controllers/income/requests"
@@ -20,19 +21,18 @@ func NewIncomeController(incomeUseCase income.Usecase) *IncomeController {
 	}
 }
 
-func (incomeController IncomeController) Signup(echoContext echo.Context) error {
+func (incomeController *IncomeController) Create(echoContext echo.Context) error {
 	createIncome := requests.CreateIncome{}
 	err := echoContext.Bind(&createIncome)
 	if err != nil {
 		return controllers.NewErrorResponse(echoContext, http.StatusInternalServerError, err)
 	}
 
-	context := echoContext.Request().Context()
-	user, err := incomeController.IncomeUseCase.Create(context, createIncome.ToDomain())
-
+	userId := uint(middlewares.GetUser(echoContext).ID)
+	income := createIncome.ToDomain()
+	result, err := incomeController.IncomeUseCase.Create(userId, income)
 	if err != nil {
-		return controllers.NewErrorResponse(echoContext, http.StatusBadRequest, err)
+		return controllers.NewErrorResponse(echoContext, http.StatusInternalServerError, err)
 	}
-
-	return controllers.NewSuccessResponse(echoContext, http.StatusCreated, responses.FromDomain(user))
+	return controllers.NewSuccessResponse(echoContext, http.StatusOK, responses.FromDomain(result))
 }

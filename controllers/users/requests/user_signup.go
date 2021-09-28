@@ -7,15 +7,15 @@ import (
 )
 
 type UserSignup struct {
-	Username string    `json:"username" gorm:"unique"`
-	Email    string    `json:"email"    gorm:"unique"`
+	Username string    `json:"username"`
+	Email    string    `json:"email"`
 	Password string    `json:"password"`
 	FullName string    `json:"fullname"`
 	DoB      time.Time `json:"dob"`
 }
 
-func (UserSignup *UserSignup) ToDomain() users.UserDomain {
-	return users.UserDomain{
+func (UserSignup *UserSignup) ToDomain() *users.UserDomain {
+	return &users.UserDomain{
 		Username: UserSignup.Username,
 		Email:    UserSignup.Email,
 		Password: UserSignup.Password,

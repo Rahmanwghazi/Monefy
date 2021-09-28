@@ -1,8 +1,6 @@
 package users
 
 import (
-	"context"
-
 	"github.com/Rahmanwghazi/Monefy/business/users"
 	"gorm.io/gorm"
 )
@@ -17,7 +15,7 @@ func NewMysqlUserRepository(connection *gorm.DB) users.Repository {
 	}
 }
 
-func (rep *mysqlUserRepository) Signup(context context.Context, domain users.UserDomain) (users.UserDomain, error) {
+func (rep *mysqlUserRepository) Signup(domain *users.UserDomain) (users.UserDomain, error) {
 	user := User{}
 	user.Username = domain.Username
 	user.Email = domain.Email
@@ -34,7 +32,7 @@ func (rep *mysqlUserRepository) Signup(context context.Context, domain users.Use
 	return user.ToDomain(), nil
 }
 
-func (repository *mysqlUserRepository) Signin(context context.Context, username string, password string) (users.UserDomain, error) {
+func (repository *mysqlUserRepository) Signin(username string, password string) (users.UserDomain, error) {
 	var user User
 	err := repository.Connection.First(&user, "username = ? AND password = ?", username, password).Error
 

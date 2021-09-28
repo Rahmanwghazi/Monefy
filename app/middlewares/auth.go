@@ -46,3 +46,9 @@ func (configJWT *ConfigJWT) GenerateTokenJWT(id int) (string, error) {
 	}
 	return token, err
 }
+
+func GetUser(echoContext echo.Context) *JwtCustomClaims {
+	user := echoContext.Get("user").(*jwt.Token)
+	claims := user.Claims.(*JwtCustomClaims)
+	return claims
+}
