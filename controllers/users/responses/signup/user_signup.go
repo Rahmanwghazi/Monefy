@@ -13,7 +13,7 @@ type UserSignup struct {
 	DoB      time.Time `json:"dob"`
 }
 
-func FromDomain(domain users.Domain) UserSignup {
+func FromDomain(domain users.UserDomain) UserSignup {
 	return UserSignup{
 		Username: domain.Username,
 		Email:    domain.Email,

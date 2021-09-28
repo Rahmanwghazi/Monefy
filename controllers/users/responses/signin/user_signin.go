@@ -14,7 +14,7 @@ type UserSignin struct {
 	Token    string    `json:"token"`
 }
 
-func FromDomain(domain users.Domain) UserSignin {
+func FromDomain(domain users.UserDomain) UserSignin {
 	return UserSignin{
 		Username: domain.Username,
 		Email:    domain.Email,

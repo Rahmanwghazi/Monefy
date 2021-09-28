@@ -7,7 +7,7 @@ import (
 	"gorm.io/gorm"
 )
 
-type Domain struct {
+type UserDomain struct {
 	gorm.Model
 	Username string
 	Email    string
@@ -18,11 +18,11 @@ type Domain struct {
 }
 
 type Usecase interface {
-	Signup(context context.Context, domain Domain) (Domain, error)
-	Signin(context context.Context, username string, password string) (Domain, error)
+	Signup(context context.Context, domain UserDomain) (UserDomain, error)
+	Signin(context context.Context, username string, password string) (UserDomain, error)
 }
 
 type Repository interface {
-	Signup(context context.Context, domain Domain) (Domain, error)
-	Signin(context context.Context, username string, password string) (Domain, error)
+	Signup(context context.Context, domain UserDomain) (UserDomain, error)
+	Signin(context context.Context, username string, password string) (UserDomain, error)
 }

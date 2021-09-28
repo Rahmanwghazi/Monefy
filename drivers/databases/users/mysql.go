@@ -17,7 +17,7 @@ func NewMysqlUserRepository(connection *gorm.DB) users.Repository {
 	}
 }
 
-func (rep *mysqlUserRepository) Signup(context context.Context, domain users.Domain) (users.Domain, error) {
+func (rep *mysqlUserRepository) Signup(context context.Context, domain users.UserDomain) (users.UserDomain, error) {
 	user := User{}
 	user.Username = domain.Username
 	user.Email = domain.Email
@@ -28,18 +28,18 @@ func (rep *mysqlUserRepository) Signup(context context.Context, domain users.Dom
 	result := rep.Connection.Create(&user)
 
 	if result.Error != nil {
-		return users.Domain{}, result.Error
+		return users.UserDomain{}, result.Error
 	}
 
 	return user.ToDomain(), nil
 }
 
-func (repository *mysqlUserRepository) Signin(context context.Context, username string, password string) (users.Domain, error) {
+func (repository *mysqlUserRepository) Signin(context context.Context, username string, password string) (users.UserDomain, error) {
 	var user User
 	err := repository.Connection.First(&user, "username = ? AND password = ?", username, password).Error
 
 	if err != nil {
-		return users.Domain{}, err
+		return users.UserDomain{}, err
 	}
 
 	return user.ToDomain(), nil

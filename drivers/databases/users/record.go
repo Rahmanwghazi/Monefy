@@ -4,6 +4,7 @@ import (
 	"time"
 
 	"github.com/Rahmanwghazi/Monefy/business/users"
+	"github.com/Rahmanwghazi/Monefy/drivers/databases/income"
 	"gorm.io/gorm"
 )
 
@@ -14,10 +15,11 @@ type User struct {
 	Password string
 	FullName string
 	DoB      time.Time
+	Income   []income.Income
 }
 
-func (user *User) ToDomain() users.Domain {
-	return users.Domain{
+func (user *User) ToDomain() users.UserDomain {
+	return users.UserDomain{
 		Model:    gorm.Model{},
 		Username: user.Username,
 		Email:    user.Email,
@@ -27,7 +29,7 @@ func (user *User) ToDomain() users.Domain {
 	}
 }
 
-func FromDomain(domain users.Domain) User {
+func FromDomain(domain users.UserDomain) User {
 	return User{
 		Model:    gorm.Model{},
 		Username: domain.Username,
