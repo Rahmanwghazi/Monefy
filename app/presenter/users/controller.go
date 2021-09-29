@@ -3,11 +3,11 @@ package users
 import (
 	"net/http"
 
+	controllers "github.com/Rahmanwghazi/Monefy/app/presenter"
+	"github.com/Rahmanwghazi/Monefy/app/presenter/users/requests"
+	"github.com/Rahmanwghazi/Monefy/app/presenter/users/responses/signin"
+	"github.com/Rahmanwghazi/Monefy/app/presenter/users/responses/signup"
 	"github.com/Rahmanwghazi/Monefy/business/users"
-	"github.com/Rahmanwghazi/Monefy/controllers"
-	"github.com/Rahmanwghazi/Monefy/controllers/users/requests"
-	"github.com/Rahmanwghazi/Monefy/controllers/users/responses/signin"
-	"github.com/Rahmanwghazi/Monefy/controllers/users/responses/signup"
 	"github.com/labstack/echo/v4"
 )
 

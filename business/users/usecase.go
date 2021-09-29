@@ -29,7 +29,7 @@ func (usecase *UserUsecase) Signup(user *UserDomain) (UserDomain, error) {
 
 func (usecase *UserUsecase) Signin(username string, password string) (UserDomain, error) {
 	user, err := usecase.Repo.Signin(username, password)
-	user.Token, err = usecase.JWT.GenerateTokenJWT(int(user.ID))
+	user.Token, err = usecase.JWT.GenerateTokenJWT(user.ID)
 	if err != nil {
 		return UserDomain{}, err
 	}

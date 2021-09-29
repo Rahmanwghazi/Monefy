@@ -12,7 +12,7 @@ type IncomeDomain struct {
 }
 
 type Usecase interface {
-	Create(userId uint, domain *IncomeDomain) (IncomeDomain, error)
+	Create(userIdomain *IncomeDomain) (IncomeDomain, error)
 }
 
 type Repository interface {

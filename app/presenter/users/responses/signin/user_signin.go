@@ -18,8 +18,8 @@ func FromDomain(domain users.UserDomain) UserSignin {
 	return UserSignin{
 		Username: domain.Username,
 		Email:    domain.Email,
-		FullName: domain.FullName,
-		DoB:      domain.DoB,
+		FullName: domain.Fullname,
+		DoB:      domain.Dob,
 		Token:    domain.Token,
 	}
 }

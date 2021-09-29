@@ -4,25 +4,25 @@ import (
 	"log"
 
 	"github.com/Rahmanwghazi/Monefy/app/middlewares"
+	_userController "github.com/Rahmanwghazi/Monefy/app/presenter/users"
 	"github.com/Rahmanwghazi/Monefy/app/routes"
 	_userUseCase "github.com/Rahmanwghazi/Monefy/business/users"
-	_userController "github.com/Rahmanwghazi/Monefy/controllers/users"
-	_userDB "github.com/Rahmanwghazi/Monefy/drivers/databases/users"
-	_userRepository "github.com/Rahmanwghazi/Monefy/drivers/databases/users"
+	_userDB "github.com/Rahmanwghazi/Monefy/repository/databases/users"
+	_userRepository "github.com/Rahmanwghazi/Monefy/repository/databases/users"
 
+	_incomeController "github.com/Rahmanwghazi/Monefy/app/presenter/income"
 	_incomeUseCase "github.com/Rahmanwghazi/Monefy/business/income"
-	_incomeController "github.com/Rahmanwghazi/Monefy/controllers/income"
-	_incomeDB "github.com/Rahmanwghazi/Monefy/drivers/databases/income"
-	_incomeRepository "github.com/Rahmanwghazi/Monefy/drivers/databases/income"
+	_incomeDB "github.com/Rahmanwghazi/Monefy/repository/databases/income"
+	_incomeRepository "github.com/Rahmanwghazi/Monefy/repository/databases/income"
 
-	_mysqlDriver "github.com/Rahmanwghazi/Monefy/drivers/mysql"
+	_mysqlDriver "github.com/Rahmanwghazi/Monefy/repository/mysql"
 	"github.com/labstack/echo/v4"
 	"github.com/spf13/viper"
 	"gorm.io/gorm"
 )
 
 func init() {
-	viper.SetConfigFile(`app/config.json`)
+	viper.SetConfigFile(`app/config/config.json`)
 	err := viper.ReadInConfig()
 	if err != nil {
 		panic(err)

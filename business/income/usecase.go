@@ -10,8 +10,8 @@ func NewIncomeUsecase(repository Repository) Usecase {
 	}
 }
 
-func (usecase *IncomeUsecase) Create(userId uint, income *IncomeDomain) (IncomeDomain, error) {
-	income.UserID = userId
+func (usecase *IncomeUsecase) Create(income *IncomeDomain) (IncomeDomain, error) {
+
 	result, err := usecase.Repo.Create(income)
 	if err != nil {
 		return IncomeDomain{}, err

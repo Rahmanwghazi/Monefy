@@ -16,10 +16,7 @@ func NewMysqlIncomeRepository(connection *gorm.DB) income.Repository {
 }
 
 func (rep *mysqlIncomeRepository) Create(domain *income.IncomeDomain) (income.IncomeDomain, error) {
-	incomeData := Income{}
-	incomeData.Total = domain.Total
-	incomeData.Description = domain.Description
-
+	incomeData := FromDomain(*domain)
 	result := rep.Connection.Create(&incomeData)
 
 	if result.Error != nil {

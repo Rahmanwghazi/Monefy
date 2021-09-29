@@ -11,8 +11,8 @@ type UserDomain struct {
 	Username string
 	Email    string
 	Password string
-	FullName string
-	DoB      time.Time
+	Fullname string
+	Dob      time.Time
 	Token    string
 }
 

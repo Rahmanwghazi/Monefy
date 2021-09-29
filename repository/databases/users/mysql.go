@@ -20,8 +20,8 @@ func (rep *mysqlUserRepository) Signup(domain *users.UserDomain) (users.UserDoma
 	user.Username = domain.Username
 	user.Email = domain.Email
 	user.Password = domain.Password
-	user.FullName = domain.FullName
-	user.DoB = domain.DoB
+	user.Fullname = domain.Fullname
+	user.Dob = domain.Dob
 
 	result := rep.Connection.Create(&user)
 

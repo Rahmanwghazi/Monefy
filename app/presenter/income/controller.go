@@ -3,11 +3,10 @@ package income
 import (
 	"net/http"
 
-	"github.com/Rahmanwghazi/Monefy/app/middlewares"
+	controllers "github.com/Rahmanwghazi/Monefy/app/presenter"
+	"github.com/Rahmanwghazi/Monefy/app/presenter/income/requests"
+	"github.com/Rahmanwghazi/Monefy/app/presenter/income/responses"
 	"github.com/Rahmanwghazi/Monefy/business/income"
-	"github.com/Rahmanwghazi/Monefy/controllers"
-	"github.com/Rahmanwghazi/Monefy/controllers/income/requests"
-	"github.com/Rahmanwghazi/Monefy/controllers/income/responses"
 	"github.com/labstack/echo/v4"
 )
 
@@ -27,10 +26,8 @@ func (incomeController *IncomeController) Create(echoContext echo.Context) error
 	if err != nil {
 		return controllers.NewErrorResponse(echoContext, http.StatusInternalServerError, err)
 	}
-
-	userId := uint(middlewares.GetUser(echoContext).ID)
 	income := createIncome.ToDomain()
-	result, err := incomeController.IncomeUseCase.Create(userId, income)
+	result, err := incomeController.IncomeUseCase.Create(income)
 	if err != nil {
 		return controllers.NewErrorResponse(echoContext, http.StatusInternalServerError, err)
 	}
