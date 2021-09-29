@@ -8,8 +8,8 @@ type CreateIncome struct {
 	Description string `json:"description"`
 }
 
-func (createIncome *CreateIncome) ToDomain() *income.IncomeDomain {
-	return &income.IncomeDomain{
+func (createIncome *CreateIncome) ToDomain() income.IncomeDomain {
+	return income.IncomeDomain{
 		UserID:      createIncome.UserID,
 		Total:       createIncome.Total,
 		Description: createIncome.Description,

@@ -44,7 +44,7 @@ func (userController UserController) Signin(echoContext echo.Context) error {
 		return controllers.NewErrorResponse(echoContext, http.StatusInternalServerError, err)
 	}
 
-	user, err := userController.UserUseCase.Signin(userSignin.Username, userSignin.Password)
+	user, err := userController.UserUseCase.Signin(userSignin.ToDomain().Username, userSignin.ToDomain().Password)
 	if err != nil {
 		return controllers.NewErrorResponse(echoContext, http.StatusBadRequest, err)
 	}

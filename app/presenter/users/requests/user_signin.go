@@ -7,9 +7,9 @@ type UserSignin struct {
 	Password string `json:"password"`
 }
 
-func (userSignin *UserSignin) ToDomain() *users.UserDomain {
-	return &users.UserDomain{
-		Email:    userSignin.Username,
+func (userSignin *UserSignin) ToDomain() users.UserDomain {
+	return users.UserDomain{
+		Username: userSignin.Username,
 		Password: userSignin.Password,
 	}
 }

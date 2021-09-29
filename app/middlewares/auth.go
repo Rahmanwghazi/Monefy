@@ -1,9 +1,7 @@
 package middlewares
 
 import (
-	"fmt"
 	"net/http"
-	"strings"
 	"time"
 
 	controllers "github.com/Rahmanwghazi/Monefy/app/presenter"
@@ -55,7 +53,7 @@ func GetUser(echoContext echo.Context) *JwtCustomClaims {
 	return claims
 }
 
-func ExtractJWT(r *http.Request) string {
+/* func ExtractJWT(r *http.Request) string {
 	authHeader := r.Header.Get("Authorization")
 	bearerToken := strings.Split(authHeader, " ")
 	if len(bearerToken) == 2 {
@@ -95,3 +93,4 @@ func ExtractTokenMeta(r *http.Request) (*JwtCustomClaims, error) {
 	}
 	return nil, err
 }
+*/

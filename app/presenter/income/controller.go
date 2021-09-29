@@ -27,7 +27,7 @@ func (incomeController *IncomeController) Create(echoContext echo.Context) error
 		return controllers.NewErrorResponse(echoContext, http.StatusInternalServerError, err)
 	}
 	income := createIncome.ToDomain()
-	result, err := incomeController.IncomeUseCase.Create(income)
+	result, err := incomeController.IncomeUseCase.Create(&income)
 	if err != nil {
 		return controllers.NewErrorResponse(echoContext, http.StatusInternalServerError, err)
 	}

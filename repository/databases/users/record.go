@@ -9,33 +9,40 @@ import (
 )
 
 type User struct {
-	gorm.Model
-	Username string `gorm:"unique"`
-	Email    string `gorm:"unique"`
-	Password string
-	Fullname string
-	Dob      time.Time
-	Income   []income.Income
+	ID           uint   `gorm:"primaryKey"`
+	Username     string `gorm:"unique"`
+	Email        string `gorm:"unique"`
+	HashPassword string
+	Fullname     string
+	Dob          time.Time
+	Income       []income.Income
+	CreatedAt    time.Time
+	UpdatedAt    time.Time
+	DeletedAt    gorm.DeletedAt `gorm:"index"`
 }
 
 func (user *User) ToDomain() users.UserDomain {
 	return users.UserDomain{
-		Model:    gorm.Model{},
-		Username: user.Username,
-		Email:    user.Email,
-		Password: user.Password,
-		Fullname: user.Fullname,
-		Dob:      user.Dob,
+		ID:           user.ID,
+		Username:     user.Username,
+		Email:        user.Email,
+		HashPassword: user.HashPassword,
+		Fullname:     user.Fullname,
+		Dob:          user.Dob,
+		CreatedAt:    user.CreatedAt,
+		UpdatedAt:    user.UpdatedAt,
 	}
 }
 
 func FromDomain(domain users.UserDomain) User {
 	return User{
-		Model:    gorm.Model{},
-		Username: domain.Username,
-		Email:    domain.Email,
-		Password: domain.Password,
-		Fullname: domain.Fullname,
-		Dob:      domain.Dob,
+		ID:           domain.ID,
+		Username:     domain.Username,
+		Email:        domain.Email,
+		HashPassword: domain.HashPassword,
+		Fullname:     domain.Fullname,
+		Dob:          domain.Dob,
+		CreatedAt:    domain.CreatedAt,
+		UpdatedAt:    domain.UpdatedAt,
 	}
 }
