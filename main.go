@@ -15,6 +15,11 @@ import (
 	_incomeDB "github.com/Rahmanwghazi/Monefy/repository/databases/income"
 	_incomeRepository "github.com/Rahmanwghazi/Monefy/repository/databases/income"
 
+	_outcomeController "github.com/Rahmanwghazi/Monefy/app/presenter/outcome"
+	_outcomeUseCase "github.com/Rahmanwghazi/Monefy/business/outcome"
+	_outcomeDB "github.com/Rahmanwghazi/Monefy/repository/databases/outcome"
+	_outcomeRepository "github.com/Rahmanwghazi/Monefy/repository/databases/outcome"
+
 	_mysqlDriver "github.com/Rahmanwghazi/Monefy/repository/mysql"
 	"github.com/labstack/echo/v4"
 	"github.com/spf13/viper"
@@ -34,6 +39,7 @@ func init() {
 func DBMigration(db *gorm.DB) {
 	db.AutoMigrate(&_userDB.User{})
 	db.AutoMigrate(&_incomeDB.Income{})
+	db.AutoMigrate(&_outcomeDB.Outcome{})
 }
 
 func main() {
@@ -63,10 +69,15 @@ func main() {
 	incomeUseCase := _incomeUseCase.NewIncomeUsecase(incomeRepository)
 	incomeController := _incomeController.NewIncomeController(incomeUseCase)
 
+	outcomeRepository := _outcomeRepository.NewMysqlOutcomeRepository(connection)
+	outcomeUseCase := _outcomeUseCase.NewOutcomeUsecase(outcomeRepository)
+	outcomeController := _outcomeController.NewOutcomeController(outcomeUseCase)
+
 	routesInit := routes.ControllerList{
-		JWTMiddleware:    configJWT.Init(),
-		UserController:   *userController,
-		IncomeController: *incomeController,
+		JWTMiddleware:     configJWT.Init(),
+		UserController:    *userController,
+		IncomeController:  *incomeController,
+		OutcomeController: *outcomeController,
 	}
 
 	routesInit.Routes(echo)

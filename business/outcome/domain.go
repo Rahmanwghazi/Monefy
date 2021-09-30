@@ -1,10 +1,10 @@
-package income
+package outcome
 
 import (
 	"gorm.io/gorm"
 )
 
-type IncomeDomain struct {
+type OutcomeDomain struct {
 	gorm.Model
 	UserID      uint
 	Total       int
@@ -12,9 +12,9 @@ type IncomeDomain struct {
 }
 
 type Usecase interface {
-	Create(domain *IncomeDomain) (IncomeDomain, error)
+	Create(domain *OutcomeDomain) (OutcomeDomain, error)
 }
 
 type Repository interface {
-	Create(domain *IncomeDomain) (IncomeDomain, error)
+	Create(domain *OutcomeDomain) (OutcomeDomain, error)
 }
