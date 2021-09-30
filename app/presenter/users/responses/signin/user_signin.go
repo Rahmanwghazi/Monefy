@@ -12,9 +12,9 @@ type UserSignin struct {
 	Email     string    `json:"email"`
 	FullName  string    `json:"fullname"`
 	DoB       time.Time `json:"dob"`
-	Token     string    `json:"token"`
 	CreatedAt time.Time `json:"created_at"`
 	UpdatedAt time.Time `json:"updated_at"`
+	Token     string    `json:"token"`
 }
 
 func FromDomain(domain users.UserDomain) UserSignin {
@@ -24,8 +24,8 @@ func FromDomain(domain users.UserDomain) UserSignin {
 		Email:     domain.Email,
 		FullName:  domain.Fullname,
 		DoB:       domain.Dob,
-		Token:     domain.Token,
 		CreatedAt: domain.CreatedAt,
 		UpdatedAt: domain.UpdatedAt,
+		Token:     domain.Token,
 	}
 }

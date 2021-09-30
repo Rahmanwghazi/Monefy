@@ -53,44 +53,8 @@ func GetUser(echoContext echo.Context) *JwtCustomClaims {
 	return claims
 }
 
-/* func ExtractJWT(r *http.Request) string {
-	authHeader := r.Header.Get("Authorization")
-	bearerToken := strings.Split(authHeader, " ")
-	if len(bearerToken) == 2 {
-		return bearerToken[1]
-	}
-	return ""
+func ExtractClaims(echoContext echo.Context) (*JwtCustomClaims, error) {
+	user := echoContext.Get("user").(*jwt.Token)
+	claims := user.Claims.(*JwtCustomClaims)
+	return claims, nil
 }
-
-func CheckToken(r *http.Request) (*jwt.Token, error) {
-	tokenStr := ExtractJWT(r)
-	token, err := jwt.Parse(tokenStr, func(token *jwt.Token) (interface{}, error) {
-		if _, ok := token.Method.(*jwt.SigningMethodHMAC); !ok {
-			return nil, fmt.Errorf("unexpected signing method: %v", token.Header["alg"])
-		}
-		return " ", nil
-	})
-	if err != nil {
-		return nil, err
-	}
-	return token, nil
-}
-
-func ExtractTokenMeta(r *http.Request) (*JwtCustomClaims, error) {
-	token, err := CheckToken(r)
-	if err != nil {
-		return nil, err
-	}
-	claims, ok := token.Claims.(jwt.MapClaims)
-	if ok && token.Valid {
-		userId, ok := claims["user_id"].(uint)
-		if !ok {
-			return nil, err
-		}
-		return &JwtCustomClaims{
-			ID: userId,
-		}, nil
-	}
-	return nil, err
-}
-*/
