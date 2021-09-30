@@ -20,6 +20,7 @@ func (controllerList *ControllerList) Routes(echoContext *echo.Echo) {
 	echoContext.POST("/signin", controllerList.UserController.Signin)
 
 	withJWT := echoContext.Group("users", middleware.JWTWithConfig(controllerList.JWTMiddleware))
+	withJWT.PUT("/edit", controllerList.UserController.Edit)
 	withJWT.POST("/income", controllerList.IncomeController.Create)
 	withJWT.POST("/outcome", controllerList.OutcomeController.Create)
 }

@@ -54,3 +54,18 @@ func (usecase *UserUsecase) Signin(username string, password string) (UserDomain
 
 	return user, nil
 }
+
+func (usecase *UserUsecase) Edit(user UserDomain) (UserDomain, error) {
+	var errorHash error
+	user.HashPassword, errorHash = encrypt.HashPassword(&user.Password)
+	if errorHash != nil {
+		return UserDomain{}, business.ErrorInternal
+	}
+
+	user, err := usecase.Repo.Edit(user)
+
+	if err != nil {
+		return UserDomain{}, err
+	}
+	return user, nil
+}

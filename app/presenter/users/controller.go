@@ -3,6 +3,7 @@ package users
 import (
 	"net/http"
 
+	"github.com/Rahmanwghazi/Monefy/app/middlewares"
 	controllers "github.com/Rahmanwghazi/Monefy/app/presenter"
 	"github.com/Rahmanwghazi/Monefy/app/presenter/users/requests"
 	"github.com/Rahmanwghazi/Monefy/app/presenter/users/responses/signin"
@@ -50,4 +51,23 @@ func (userController UserController) Signin(echoContext echo.Context) error {
 	}
 
 	return controllers.NewSuccessResponse(echoContext, http.StatusOK, signin.FromDomain(user))
+}
+
+func (userController UserController) Edit(echoContext echo.Context) error {
+	userEdit := requests.UserEdit{}
+	err := echoContext.Bind(&userEdit)
+	if err != nil {
+		return controllers.NewErrorResponse(echoContext, http.StatusInternalServerError, err)
+	}
+
+	userEdited := userEdit.ToDomain()
+	claims, err := middlewares.ExtractClaims(echoContext)
+	userEdited.ID = claims.ID
+
+	result, err := userController.UserUseCase.Edit(userEdited)
+	if err != nil {
+		return controllers.NewErrorResponse(echoContext, http.StatusBadRequest, err)
+	}
+
+	return controllers.NewSuccessResponse(echoContext, http.StatusCreated, signup.FromDomain(result))
 }
