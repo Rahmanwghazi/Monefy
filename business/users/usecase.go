@@ -49,7 +49,7 @@ func (usecase *UserUsecase) Signin(username string, password string) (UserDomain
 
 	user.Token, err = usecase.JWT.GenerateTokenJWT(user.ID)
 	if err != nil {
-		return UserDomain{}, err
+		return UserDomain{}, business.ErrorInternal
 	}
 
 	return user, nil

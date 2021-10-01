@@ -22,7 +22,7 @@ func NewExpenseController(expenseUseCase expenses.Usecase) *ExpenseController {
 }
 
 func (expenseController ExpenseController) Create(echoContext echo.Context) error {
-	createExpense := requests.CreateExpense{}
+	createExpense := requests.Expense{}
 	err := echoContext.Bind(&createExpense)
 	if err != nil {
 		return controllers.NewErrorResponse(echoContext, http.StatusInternalServerError, err)
@@ -40,7 +40,7 @@ func (expenseController ExpenseController) Create(echoContext echo.Context) erro
 }
 
 func (expenseController ExpenseController) GetExpenses(echoContext echo.Context) error {
-	createExpense := requests.CreateExpense{}
+	createExpense := requests.Expense{}
 	err := echoContext.Bind(&createExpense)
 	if err != nil {
 		return controllers.NewErrorResponse(echoContext, http.StatusInternalServerError, err)

@@ -1,14 +1,14 @@
 package income
 
-import (
-	"gorm.io/gorm"
-)
+import "time"
 
 type IncomeDomain struct {
-	gorm.Model
+	ID          uint
 	UserID      uint
 	Total       int
 	Description string
+	CreatedAt   time.Time
+	UpdatedAt   time.Time
 }
 
 type Usecase interface {

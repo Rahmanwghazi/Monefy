@@ -1,17 +1,23 @@
 package requests
 
-import "github.com/Rahmanwghazi/Monefy/business/expenses"
+import (
+	"time"
 
-type CreateExpense struct {
-	UserID      uint   `json:"user_id"`
-	Total       int    `json:"total"`
-	Description string `json:"description"`
+	"github.com/Rahmanwghazi/Monefy/business/expenses"
+)
+
+type Expense struct {
+	UserID      uint      `json:"user_id"`
+	Total       int       `json:"total"`
+	Description string    `json:"description"`
+	CreatedAt   time.Time `json:"created_at"`
+	UpdatedAt   time.Time `json:"updated_at"`
 }
 
-func (createExpense *CreateExpense) ToDomain() expenses.ExpenseDomain {
+func (expense *Expense) ToDomain() expenses.ExpenseDomain {
 	return expenses.ExpenseDomain{
-		UserID:      createExpense.UserID,
-		Total:       createExpense.Total,
-		Description: createExpense.Description,
+		UserID:      expense.UserID,
+		Total:       expense.Total,
+		Description: expense.Description,
 	}
 }

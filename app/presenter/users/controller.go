@@ -23,7 +23,7 @@ func NewUserController(userUseCase users.Usecase) *UserController {
 }
 
 func (userController UserController) Signup(echoContext echo.Context) error {
-	userSignup := requests.UserSignup{}
+	userSignup := requests.User{}
 	err := echoContext.Bind(&userSignup)
 	if err != nil {
 		return controllers.NewErrorResponse(echoContext, http.StatusInternalServerError, err)
@@ -39,7 +39,7 @@ func (userController UserController) Signup(echoContext echo.Context) error {
 }
 
 func (userController UserController) Signin(echoContext echo.Context) error {
-	userSignin := requests.UserSignin{}
+	userSignin := requests.User{}
 	err := echoContext.Bind(&userSignin)
 	if err != nil {
 		return controllers.NewErrorResponse(echoContext, http.StatusInternalServerError, err)
@@ -54,7 +54,7 @@ func (userController UserController) Signin(echoContext echo.Context) error {
 }
 
 func (userController UserController) Edit(echoContext echo.Context) error {
-	userEdit := requests.UserEdit{}
+	userEdit := requests.User{}
 	err := echoContext.Bind(&userEdit)
 	if err != nil {
 		return controllers.NewErrorResponse(echoContext, http.StatusInternalServerError, err)

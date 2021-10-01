@@ -6,8 +6,7 @@ import (
 	"github.com/Rahmanwghazi/Monefy/business/users"
 )
 
-type UserEdit struct {
-	ID       uint      `json:"id"`
+type User struct {
 	Username string    `json:"username"`
 	Email    string    `json:"email"`
 	Password string    `json:"password"`
@@ -15,13 +14,12 @@ type UserEdit struct {
 	Dob      time.Time `json:"dob"`
 }
 
-func (UserEdit *UserEdit) ToDomain() users.UserDomain {
+func (User *User) ToDomain() users.UserDomain {
 	return users.UserDomain{
-		ID:       UserEdit.ID,
-		Username: UserEdit.Username,
-		Email:    UserEdit.Email,
-		Password: UserEdit.Password,
-		Fullname: UserEdit.Fullname,
-		Dob:      UserEdit.Dob,
+		Username: User.Username,
+		Email:    User.Email,
+		Password: User.Password,
+		Fullname: User.Fullname,
+		Dob:      User.Dob,
 	}
 }
