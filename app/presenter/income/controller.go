@@ -21,7 +21,7 @@ func NewIncomeController(incomeUseCase income.Usecase) *IncomeController {
 	}
 }
 
-func (incomeController *IncomeController) Create(echoContext echo.Context) error {
+func (incomeController IncomeController) Create(echoContext echo.Context) error {
 	createIncome := requests.CreateIncome{}
 	err := echoContext.Bind(&createIncome)
 	if err != nil {
@@ -32,9 +32,27 @@ func (incomeController *IncomeController) Create(echoContext echo.Context) error
 	claims, err := middlewares.ExtractClaims(echoContext)
 	income.UserID = claims.ID
 
-	result, err := incomeController.IncomeUseCase.Create(&income)
+	result, err := incomeController.IncomeUseCase.Create(income)
 	if err != nil {
 		return controllers.NewErrorResponse(echoContext, http.StatusInternalServerError, err)
 	}
 	return controllers.NewSuccessResponse(echoContext, http.StatusOK, responses.FromDomain(result))
+}
+
+func (incomeController IncomeController) GetIncome(echoContext echo.Context) error {
+	createIncome := requests.CreateIncome{}
+	err := echoContext.Bind(&createIncome)
+	if err != nil {
+		return controllers.NewErrorResponse(echoContext, http.StatusInternalServerError, err)
+	}
+
+	income := createIncome.ToDomain()
+	claims, err := middlewares.ExtractClaims(echoContext)
+	income.UserID = claims.ID
+
+	result, err := incomeController.IncomeUseCase.GetIncome(income)
+	if err != nil {
+		return controllers.NewErrorResponse(echoContext, http.StatusInternalServerError, err)
+	}
+	return controllers.NewSuccessResponse(echoContext, http.StatusOK, responses.FromArrayDomain(result))
 }

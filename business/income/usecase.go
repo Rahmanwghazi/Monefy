@@ -10,11 +10,20 @@ func NewIncomeUsecase(repository Repository) Usecase {
 	}
 }
 
-func (usecase *IncomeUsecase) Create(income *IncomeDomain) (IncomeDomain, error) {
+func (usecase *IncomeUsecase) Create(income IncomeDomain) (IncomeDomain, error) {
 
 	result, err := usecase.Repo.Create(income)
 	if err != nil {
 		return IncomeDomain{}, err
 	}
 	return result, nil
+}
+
+func (usecase *IncomeUsecase) GetIncome(income IncomeDomain) ([]IncomeDomain, error) {
+	result, err := usecase.Repo.GetIncome(income)
+	if err != nil {
+		return []IncomeDomain{}, err
+	}
+	return result, nil
+
 }

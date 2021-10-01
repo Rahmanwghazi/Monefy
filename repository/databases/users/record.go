@@ -4,8 +4,8 @@ import (
 	"time"
 
 	"github.com/Rahmanwghazi/Monefy/business/users"
+	"github.com/Rahmanwghazi/Monefy/repository/databases/expenses"
 	"github.com/Rahmanwghazi/Monefy/repository/databases/income"
-	"github.com/Rahmanwghazi/Monefy/repository/databases/outcome"
 	"gorm.io/gorm"
 )
 
@@ -17,7 +17,7 @@ type User struct {
 	Fullname     string
 	Dob          time.Time
 	Income       []income.Income
-	Outcome      []outcome.Outcome
+	Expense      []expenses.Expense
 	CreatedAt    time.Time
 	UpdatedAt    time.Time
 	DeletedAt    gorm.DeletedAt `gorm:"index"`

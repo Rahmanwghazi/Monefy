@@ -15,10 +15,10 @@ import (
 	_incomeDB "github.com/Rahmanwghazi/Monefy/repository/databases/income"
 	_incomeRepository "github.com/Rahmanwghazi/Monefy/repository/databases/income"
 
-	_outcomeController "github.com/Rahmanwghazi/Monefy/app/presenter/outcome"
-	_outcomeUseCase "github.com/Rahmanwghazi/Monefy/business/outcome"
-	_outcomeDB "github.com/Rahmanwghazi/Monefy/repository/databases/outcome"
-	_outcomeRepository "github.com/Rahmanwghazi/Monefy/repository/databases/outcome"
+	_expenseController "github.com/Rahmanwghazi/Monefy/app/presenter/expenses"
+	_expenseUseCase "github.com/Rahmanwghazi/Monefy/business/expenses"
+	_expenseDB "github.com/Rahmanwghazi/Monefy/repository/databases/expenses"
+	_expenseRepository "github.com/Rahmanwghazi/Monefy/repository/databases/expenses"
 
 	_mysqlDriver "github.com/Rahmanwghazi/Monefy/repository/mysql"
 	"github.com/labstack/echo/v4"
@@ -39,7 +39,7 @@ func init() {
 func DBMigration(db *gorm.DB) {
 	db.AutoMigrate(&_userDB.User{})
 	db.AutoMigrate(&_incomeDB.Income{})
-	db.AutoMigrate(&_outcomeDB.Outcome{})
+	db.AutoMigrate(&_expenseDB.Expense{})
 }
 
 func main() {
@@ -69,15 +69,15 @@ func main() {
 	incomeUseCase := _incomeUseCase.NewIncomeUsecase(incomeRepository)
 	incomeController := _incomeController.NewIncomeController(incomeUseCase)
 
-	outcomeRepository := _outcomeRepository.NewMysqlOutcomeRepository(connection)
-	outcomeUseCase := _outcomeUseCase.NewOutcomeUsecase(outcomeRepository)
-	outcomeController := _outcomeController.NewOutcomeController(outcomeUseCase)
+	expenseRepository := _expenseRepository.NewMysqlExpenseRepository(connection)
+	expenseUseCase := _expenseUseCase.NewExpenseUsecase(expenseRepository)
+	expenseController := _expenseController.NewExpenseController(expenseUseCase)
 
 	routesInit := routes.ControllerList{
 		JWTMiddleware:     configJWT.Init(),
 		UserController:    *userController,
 		IncomeController:  *incomeController,
-		OutcomeController: *outcomeController,
+		ExpenseController: *expenseController,
 	}
 
 	routesInit.Routes(echo)

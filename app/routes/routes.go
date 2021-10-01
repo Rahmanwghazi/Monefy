@@ -1,8 +1,8 @@
 package routes
 
 import (
+	"github.com/Rahmanwghazi/Monefy/app/presenter/expenses"
 	"github.com/Rahmanwghazi/Monefy/app/presenter/income"
-	"github.com/Rahmanwghazi/Monefy/app/presenter/outcome"
 	"github.com/Rahmanwghazi/Monefy/app/presenter/users"
 	"github.com/labstack/echo/v4"
 	"github.com/labstack/echo/v4/middleware"
@@ -12,7 +12,7 @@ type ControllerList struct {
 	JWTMiddleware     middleware.JWTConfig
 	UserController    users.UserController
 	IncomeController  income.IncomeController
-	OutcomeController outcome.OutcomeController
+	ExpenseController expenses.ExpenseController
 }
 
 func (controllerList *ControllerList) Routes(echoContext *echo.Echo) {
@@ -22,7 +22,9 @@ func (controllerList *ControllerList) Routes(echoContext *echo.Echo) {
 	withJWT := echoContext.Group("users", middleware.JWTWithConfig(controllerList.JWTMiddleware))
 	withJWT.PUT("/edit", controllerList.UserController.Edit)
 	withJWT.POST("/income", controllerList.IncomeController.Create)
-	withJWT.POST("/outcome", controllerList.OutcomeController.Create)
+	withJWT.POST("/expense", controllerList.ExpenseController.Create)
+	withJWT.GET("/income", controllerList.IncomeController.GetIncome)
+	withJWT.GET("/expenses", controllerList.ExpenseController.GetExpenses)
 }
 
 //edit & delete user validation

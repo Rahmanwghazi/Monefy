@@ -22,6 +22,14 @@ func (incomeData *Income) ToDomain() income.IncomeDomain {
 	}
 }
 
+func ToArrayDomain(incomeData []Income, domain income.IncomeDomain) []income.IncomeDomain {
+	result := []income.IncomeDomain{}
+	for _, income := range incomeData {
+		result = append(result, income.ToDomain())
+	}
+	return result
+}
+
 func FromDomain(domain income.IncomeDomain) *Income {
 	return &Income{
 		Model:       gorm.Model{},

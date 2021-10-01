@@ -44,7 +44,7 @@ func (usecase *UserUsecase) Signin(username string, password string) (UserDomain
 	}
 
 	if !encrypt.CheckPasswordHash(user.HashPassword, password) {
-		return UserDomain{}, business.ErrorDuplicateEmail
+		return UserDomain{}, business.ErrorInvalidSigninInfo
 	}
 
 	user.Token, err = usecase.JWT.GenerateTokenJWT(user.ID)

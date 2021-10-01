@@ -15,8 +15,8 @@ func NewMysqlIncomeRepository(connection *gorm.DB) income.Repository {
 	}
 }
 
-func (rep *mysqlIncomeRepository) Create(domain *income.IncomeDomain) (income.IncomeDomain, error) {
-	incomeData := FromDomain(*domain)
+func (rep *mysqlIncomeRepository) Create(domain income.IncomeDomain) (income.IncomeDomain, error) {
+	incomeData := FromDomain(domain)
 	result := rep.Connection.Create(&incomeData)
 
 	if result.Error != nil {
@@ -24,4 +24,15 @@ func (rep *mysqlIncomeRepository) Create(domain *income.IncomeDomain) (income.In
 	}
 
 	return incomeData.ToDomain(), nil
+}
+
+func (rep *mysqlIncomeRepository) GetIncome(domain income.IncomeDomain) ([]income.IncomeDomain, error) {
+	var incomeData []Income
+	result := rep.Connection.Find(&incomeData, "user_id = ?", domain.UserID)
+
+	if result.Error != nil {
+		return []income.IncomeDomain{}, result.Error
+	}
+
+	return ToArrayDomain(incomeData, domain), nil
 }
