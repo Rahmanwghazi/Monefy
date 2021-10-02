@@ -20,6 +20,13 @@ import (
 	_expenseDB "github.com/Rahmanwghazi/Monefy/repository/databases/expenses"
 	_expenseRepository "github.com/Rahmanwghazi/Monefy/repository/databases/expenses"
 
+	_investplanController "github.com/Rahmanwghazi/Monefy/app/presenter/investplans"
+	_investplanUseCase "github.com/Rahmanwghazi/Monefy/business/investplans"
+	_investplanDB "github.com/Rahmanwghazi/Monefy/repository/databases/investplans"
+	_investplanRepository "github.com/Rahmanwghazi/Monefy/repository/databases/investplans"
+
+	_productRepository "github.com/Rahmanwghazi/Monefy/repository/thirdparties/ojk_invest"
+
 	_mysqlDriver "github.com/Rahmanwghazi/Monefy/repository/mysql"
 	"github.com/labstack/echo/v4"
 	"github.com/spf13/viper"
@@ -40,6 +47,7 @@ func DBMigration(db *gorm.DB) {
 	db.AutoMigrate(&_userDB.User{})
 	db.AutoMigrate(&_incomeDB.Income{})
 	db.AutoMigrate(&_expenseDB.Expense{})
+	db.AutoMigrate(&_investplanDB.InvestPlan{})
 }
 
 func main() {
@@ -61,6 +69,8 @@ func main() {
 
 	echo := echo.New()
 
+	productRepository := _productRepository.NewOJKAPI()
+
 	userRepository := _userRepository.NewMysqlUserRepository(connection)
 	userUseCase := _userUseCase.NewUserUsecase(userRepository, &configJWT)
 	userController := _userController.NewUserController(userUseCase)
@@ -73,11 +83,16 @@ func main() {
 	expenseUseCase := _expenseUseCase.NewExpenseUsecase(expenseRepository)
 	expenseController := _expenseController.NewExpenseController(expenseUseCase)
 
+	investplanRepository := _investplanRepository.NewMysqlnvestPlanRepository(connection)
+	investplanUseCase := _investplanUseCase.NewInvestPlanUsecase(investplanRepository, productRepository)
+	investplanController := _investplanController.NewInvestPlanController(investplanUseCase)
+
 	routesInit := routes.ControllerList{
-		JWTMiddleware:     configJWT.Init(),
-		UserController:    *userController,
-		IncomeController:  *incomeController,
-		ExpenseController: *expenseController,
+		JWTMiddleware:        configJWT.Init(),
+		UserController:       *userController,
+		IncomeController:     *incomeController,
+		ExpenseController:    *expenseController,
+		InvestPlanController: *investplanController,
 	}
 
 	routesInit.Routes(echo)

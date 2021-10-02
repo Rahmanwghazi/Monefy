@@ -1,4 +1,4 @@
-package controllers
+package presenter
 
 import (
 	"github.com/labstack/echo/v4"

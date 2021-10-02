@@ -4,7 +4,7 @@ import (
 	"net/http"
 
 	"github.com/Rahmanwghazi/Monefy/app/middlewares"
-	controllers "github.com/Rahmanwghazi/Monefy/app/presenter"
+	"github.com/Rahmanwghazi/Monefy/app/presenter"
 	"github.com/Rahmanwghazi/Monefy/app/presenter/income/requests"
 	"github.com/Rahmanwghazi/Monefy/app/presenter/income/responses"
 	"github.com/Rahmanwghazi/Monefy/business/income"
@@ -25,7 +25,7 @@ func (incomeController IncomeController) Create(echoContext echo.Context) error 
 	createIncome := requests.CreateIncome{}
 	err := echoContext.Bind(&createIncome)
 	if err != nil {
-		return controllers.NewErrorResponse(echoContext, http.StatusInternalServerError, err)
+		return presenter.NewErrorResponse(echoContext, http.StatusInternalServerError, err)
 	}
 
 	income := createIncome.ToDomain()
@@ -34,16 +34,16 @@ func (incomeController IncomeController) Create(echoContext echo.Context) error 
 
 	result, err := incomeController.IncomeUseCase.Create(income)
 	if err != nil {
-		return controllers.NewErrorResponse(echoContext, http.StatusInternalServerError, err)
+		return presenter.NewErrorResponse(echoContext, http.StatusInternalServerError, err)
 	}
-	return controllers.NewSuccessResponse(echoContext, http.StatusOK, responses.FromDomain(result))
+	return presenter.NewSuccessResponse(echoContext, http.StatusOK, responses.FromDomain(result))
 }
 
 func (incomeController IncomeController) GetIncome(echoContext echo.Context) error {
 	createIncome := requests.CreateIncome{}
 	err := echoContext.Bind(&createIncome)
 	if err != nil {
-		return controllers.NewErrorResponse(echoContext, http.StatusInternalServerError, err)
+		return presenter.NewErrorResponse(echoContext, http.StatusInternalServerError, err)
 	}
 
 	income := createIncome.ToDomain()
@@ -52,7 +52,7 @@ func (incomeController IncomeController) GetIncome(echoContext echo.Context) err
 
 	result, err := incomeController.IncomeUseCase.GetIncome(income)
 	if err != nil {
-		return controllers.NewErrorResponse(echoContext, http.StatusInternalServerError, err)
+		return presenter.NewErrorResponse(echoContext, http.StatusInternalServerError, err)
 	}
-	return controllers.NewSuccessResponse(echoContext, http.StatusOK, responses.FromArrayDomain(result))
+	return presenter.NewSuccessResponse(echoContext, http.StatusOK, responses.FromArrayDomain(result))
 }

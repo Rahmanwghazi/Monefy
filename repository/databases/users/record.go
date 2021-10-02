@@ -6,6 +6,7 @@ import (
 	"github.com/Rahmanwghazi/Monefy/business/users"
 	"github.com/Rahmanwghazi/Monefy/repository/databases/expenses"
 	"github.com/Rahmanwghazi/Monefy/repository/databases/income"
+	"github.com/Rahmanwghazi/Monefy/repository/databases/investplans"
 	"gorm.io/gorm"
 )
 
@@ -18,6 +19,7 @@ type User struct {
 	Dob          time.Time
 	Income       []income.Income
 	Expense      []expenses.Expense
+	InvestPlan   []investplans.InvestPlan
 	CreatedAt    time.Time
 	UpdatedAt    time.Time
 	DeletedAt    gorm.DeletedAt `gorm:"index"`
