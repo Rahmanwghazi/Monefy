@@ -5,19 +5,22 @@ import (
 )
 
 type Products struct {
-	ID         int    `json:"id"`
-	Name       string `json:"name"`
-	Management string `json:"management"`
-	Custodian  string `json:"custodian"`
-	Type       string `json:"type"`
+	Data struct {
+		Product struct {
+			ID         int    `json:"id"`
+			Name       string `json:"name"`
+			Management string `json:"management"`
+			Custodian  string `json:"custodian"`
+			Type       string `json:"type"`
+		} `json:"product"`
+		Version string `json:"version"`
+	} `json:"data"`
+	Error interface{} `json:"error"`
 }
 
 func (productResponse *Products) toDomain() products.ProductDomain {
 	return products.ProductDomain{
-		ID:         productResponse.ID,
-		Name:       productResponse.Name,
-		Maangement: productResponse.Management,
-		Custodian:  productResponse.Custodian,
-		Type:       productResponse.Type,
+		Data:  productResponse.Data,
+		Error: productResponse.Error,
 	}
 }

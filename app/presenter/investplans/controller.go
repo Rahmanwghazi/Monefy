@@ -23,21 +23,20 @@ func NewInvestPlanController(investPlanUseCase investplans.Usecase) *InvestPlanC
 }
 
 func (investPlanController InvestPlanController) Create(echoContext echo.Context) error {
-	createInvestPlan := requests.InvestPlan{}
-	err := echoContext.Bind(&createInvestPlan)
-	if err != nil {
-		return presenter.NewErrorResponse(echoContext, http.StatusInternalServerError, err)
+	request := requests.InvestPlan{}
+
+	if err := echoContext.Bind(&request); err != nil {
+		return presenter.NewErrorResponse(echoContext, http.StatusBadRequest, err)
 	}
 
-	investPlan := createInvestPlan.ToDomain()
 	claims, err := middlewares.ExtractClaims(echoContext)
-	investPlan.UserID = claims.ID
+	request.UserID = claims.ID
 
-	id := strconv.Itoa(investPlan.ProductID)
+	idProduct := strconv.Itoa(request.ProductID)
 
-	result, err := investPlanController.InvestPlanUseCase.Create(id, investPlan)
+	response, err := investPlanController.InvestPlanUseCase.Create(idProduct, request.ToDomain())
 	if err != nil {
 		return presenter.NewErrorResponse(echoContext, http.StatusInternalServerError, err)
 	}
-	return presenter.NewSuccessResponse(echoContext, http.StatusOK, responses.FromDomain(result))
+	return presenter.NewSuccessResponse(echoContext, http.StatusOK, responses.FromDomain(response))
 }

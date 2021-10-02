@@ -4,8 +4,8 @@ import "time"
 
 type InvestPlanDomain struct {
 	ID          uint
-	ProductID   int
 	UserID      uint
+	ProductID   int
 	Total       int
 	DueDate     time.Time
 	Description string

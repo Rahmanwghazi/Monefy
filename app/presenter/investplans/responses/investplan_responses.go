@@ -8,7 +8,6 @@ import (
 
 type InvestPlan struct {
 	ID          uint      `json:"id"`
-	ProductID   int       `json:"product_id"`
 	Total       int       `json:"total"`
 	DueDate     time.Time `json:"due_date"`
 	Description string    `json:"description"`
@@ -20,7 +19,6 @@ type InvestPlan struct {
 func FromDomain(domain investplans.InvestPlanDomain) InvestPlan {
 	return InvestPlan{
 		ID:          domain.ID,
-		ProductID:   domain.ProductID,
 		Total:       domain.Total,
 		DueDate:     domain.DueDate,
 		Description: domain.Description,
@@ -35,7 +33,6 @@ func FromArrayDomain(domain []investplans.InvestPlanDomain) []InvestPlan {
 	for _, value := range domain {
 		investPlan = append(investPlan, InvestPlan{
 			ID:          value.ID,
-			ProductID:   value.ProductID,
 			Total:       value.Total,
 			DueDate:     value.DueDate,
 			Description: value.Description,

@@ -1,11 +1,17 @@
 package products
 
 type ProductDomain struct {
-	ID         int
-	Name       string
-	Maangement string
-	Custodian  string
-	Type       string
+	Data struct {
+		Product struct {
+			ID         int    `json:"id"`
+			Name       string `json:"name"`
+			Management string `json:"management"`
+			Custodian  string `json:"custodian"`
+			Type       string `json:"type"`
+		} `json:"product"`
+		Version string `json:"version"`
+	} `json:"data"`
+	Error interface{} `json:"error"`
 }
 
 type Repository interface {

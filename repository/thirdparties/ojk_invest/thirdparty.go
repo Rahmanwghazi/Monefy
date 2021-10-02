@@ -17,17 +17,17 @@ func NewOJKAPI() products.Repository {
 	}
 }
 
-func (ipl *OJKAPI) GetProductByID(ID string) (products.ProductDomain, error) {
-	req, _ := http.NewRequest("GET", "https://ojk-invest-api.vercel.app/api/products/"+ID, nil)
-	resp, err := ipl.httpClient.Do(req)
+func (product *OJKAPI) GetProductByID(ID string) (products.ProductDomain, error) {
+	request, _ := http.NewRequest("GET", "https://ojk-invest-api.vercel.app/api/products/"+ID, nil)
+	response, err := product.httpClient.Do(request)
 	if err != nil {
 		return products.ProductDomain{}, err
 	}
 
-	defer resp.Body.Close()
+	defer response.Body.Close()
 
 	data := Products{}
-	err = json.NewDecoder(resp.Body).Decode(&data)
+	err = json.NewDecoder(response.Body).Decode(&data)
 	if err != nil {
 		return products.ProductDomain{}, err
 	}

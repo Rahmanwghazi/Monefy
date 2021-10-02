@@ -11,7 +11,6 @@ import (
 type InvestPlan struct {
 	ID          uint
 	UserID      uint
-	ProductID   int
 	Total       int
 	DueDate     time.Time
 	Description string
@@ -25,7 +24,6 @@ func (investPlanData *InvestPlan) ToDomain() investplans.InvestPlanDomain {
 	return investplans.InvestPlanDomain{
 		ID:          investPlanData.ID,
 		UserID:      investPlanData.UserID,
-		ProductID:   investPlanData.ProductID,
 		Total:       investPlanData.Total,
 		DueDate:     investPlanData.DueDate,
 		Description: investPlanData.Description,
@@ -47,7 +45,6 @@ func FromDomain(domain investplans.InvestPlanDomain) *InvestPlan {
 	return &InvestPlan{
 		ID:          domain.ID,
 		UserID:      domain.UserID,
-		ProductID:   domain.ProductID,
 		Total:       domain.Total,
 		DueDate:     domain.DueDate,
 		Description: domain.Description,
