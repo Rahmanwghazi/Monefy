@@ -16,10 +16,12 @@ type InvestPlanDomain struct {
 
 type Usecase interface {
 	Create(idProduct string, domain InvestPlanDomain) (InvestPlanDomain, error)
-	//GetExpense(domain ExpenseDomain) ([]ExpenseDomain, error)
+	GetPlans(domain InvestPlanDomain) ([]InvestPlanDomain, error)
+	EditPlan(domain InvestPlanDomain, id uint) (InvestPlanDomain, error)
 }
 
 type Repository interface {
 	Create(domain InvestPlanDomain) (InvestPlanDomain, error)
-	//GetExpense(domain ExpenseDomain) ([]ExpenseDomain, error)
+	GetPlans(domain InvestPlanDomain) ([]InvestPlanDomain, error)
+	EditPlan(domain InvestPlanDomain, id uint) (InvestPlanDomain, error)
 }

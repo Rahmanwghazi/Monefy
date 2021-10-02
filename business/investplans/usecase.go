@@ -20,7 +20,7 @@ func NewInvestPlanUsecase(repository Repository, product products.Repository) Us
 	}
 }
 
-func (usecase *InvestPlanUsecase) Create(idProduct string, investplanDomain InvestPlanDomain) (InvestPlanDomain, error) {
+func (usecase *InvestPlanUsecase) Create(idProduct string, domain InvestPlanDomain) (InvestPlanDomain, error) {
 
 	product, err := usecase.Product.GetProductByID(idProduct)
 	if strings.TrimSpace(idProduct) != "" {
@@ -31,10 +31,26 @@ func (usecase *InvestPlanUsecase) Create(idProduct string, investplanDomain Inve
 		if err != nil {
 			log.Default().Printf("%+v", err)
 		}
-		investplanDomain.Description = string(jsonMarshal)
+		domain.Description = string(jsonMarshal)
 	}
 
-	result, err := usecase.Repo.Create(investplanDomain)
+	result, err := usecase.Repo.Create(domain)
+	if err != nil {
+		return InvestPlanDomain{}, err
+	}
+	return result, nil
+}
+
+func (usecase *InvestPlanUsecase) GetPlans(domain InvestPlanDomain) ([]InvestPlanDomain, error) {
+	result, err := usecase.Repo.GetPlans(domain)
+	if err != nil {
+		return []InvestPlanDomain{}, err
+	}
+	return result, nil
+}
+
+func (usecase *InvestPlanUsecase) EditPlan(domain InvestPlanDomain, id uint) (InvestPlanDomain, error) {
+	result, err := usecase.Repo.EditPlan(domain, id)
 	if err != nil {
 		return InvestPlanDomain{}, err
 	}

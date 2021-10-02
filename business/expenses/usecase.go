@@ -10,9 +10,8 @@ func NewExpenseUsecase(repository Repository) Usecase {
 	}
 }
 
-func (usecase *ExpenseUsecase) Create(expense ExpenseDomain) (ExpenseDomain, error) {
-
-	result, err := usecase.Repo.Create(expense)
+func (usecase *ExpenseUsecase) CreateExpense(expense ExpenseDomain) (ExpenseDomain, error) {
+	result, err := usecase.Repo.CreateExpense(expense)
 	if err != nil {
 		return ExpenseDomain{}, err
 	}
@@ -25,5 +24,12 @@ func (usecase *ExpenseUsecase) GetExpense(expense ExpenseDomain) ([]ExpenseDomai
 		return []ExpenseDomain{}, err
 	}
 	return result, nil
+}
 
+func (usecase *ExpenseUsecase) EditExpense(expense ExpenseDomain, id uint) (ExpenseDomain, error) {
+	result, err := usecase.Repo.EditExpense(expense, id)
+	if err != nil {
+		return ExpenseDomain{}, err
+	}
+	return result, nil
 }

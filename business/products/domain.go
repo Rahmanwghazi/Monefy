@@ -11,7 +11,6 @@ type ProductDomain struct {
 		} `json:"product"`
 		Version string `json:"version"`
 	} `json:"data"`
-	Error interface{} `json:"error"`
 }
 
 type Repository interface {

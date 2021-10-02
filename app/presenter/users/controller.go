@@ -6,6 +6,7 @@ import (
 	"github.com/Rahmanwghazi/Monefy/app/middlewares"
 	controllers "github.com/Rahmanwghazi/Monefy/app/presenter"
 	"github.com/Rahmanwghazi/Monefy/app/presenter/users/requests"
+	"github.com/Rahmanwghazi/Monefy/app/presenter/users/responses/edit"
 	"github.com/Rahmanwghazi/Monefy/app/presenter/users/responses/signin"
 	"github.com/Rahmanwghazi/Monefy/app/presenter/users/responses/signup"
 	"github.com/Rahmanwghazi/Monefy/business/users"
@@ -69,5 +70,5 @@ func (userController UserController) Edit(echoContext echo.Context) error {
 		return controllers.NewErrorResponse(echoContext, http.StatusBadRequest, err)
 	}
 
-	return controllers.NewSuccessResponse(echoContext, http.StatusCreated, signup.FromDomain(result))
+	return controllers.NewSuccessResponse(echoContext, http.StatusCreated, edit.FromDomain(result))
 }

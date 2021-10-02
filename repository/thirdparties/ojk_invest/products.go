@@ -20,7 +20,6 @@ type Products struct {
 
 func (productResponse *Products) toDomain() products.ProductDomain {
 	return products.ProductDomain{
-		Data:  productResponse.Data,
-		Error: productResponse.Error,
+		Data: productResponse.Data,
 	}
 }

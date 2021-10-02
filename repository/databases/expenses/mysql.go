@@ -15,7 +15,7 @@ func NewMysqlExpenseRepository(connection *gorm.DB) expenses.Repository {
 	}
 }
 
-func (rep *mysqlExpenseRepository) Create(domain expenses.ExpenseDomain) (expenses.ExpenseDomain, error) {
+func (rep *mysqlExpenseRepository) CreateExpense(domain expenses.ExpenseDomain) (expenses.ExpenseDomain, error) {
 	expenseData := FromDomain(domain)
 	result := rep.Connection.Create(&expenseData)
 
@@ -35,4 +35,15 @@ func (rep *mysqlExpenseRepository) GetExpense(domain expenses.ExpenseDomain) ([]
 	}
 
 	return ToArrayDomain(expenseData, domain), nil
+}
+
+func (rep *mysqlExpenseRepository) EditExpense(domain expenses.ExpenseDomain, id uint) (expenses.ExpenseDomain, error) {
+	expenseData := FromDomain(domain)
+
+	result := rep.Connection.Where("ID = ?", id).Updates(&expenseData)
+
+	if result.Error != nil {
+		return expenses.ExpenseDomain{}, result.Error
+	}
+	return expenseData.ToDomain(), nil
 }

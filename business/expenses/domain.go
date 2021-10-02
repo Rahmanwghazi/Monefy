@@ -12,11 +12,13 @@ type ExpenseDomain struct {
 }
 
 type Usecase interface {
-	Create(domain ExpenseDomain) (ExpenseDomain, error)
+	CreateExpense(domain ExpenseDomain) (ExpenseDomain, error)
 	GetExpense(domain ExpenseDomain) ([]ExpenseDomain, error)
+	EditExpense(domain ExpenseDomain, id uint) (ExpenseDomain, error)
 }
 
 type Repository interface {
-	Create(domain ExpenseDomain) (ExpenseDomain, error)
+	CreateExpense(domain ExpenseDomain) (ExpenseDomain, error)
 	GetExpense(domain ExpenseDomain) ([]ExpenseDomain, error)
+	EditExpense(domain ExpenseDomain, id uint) (ExpenseDomain, error)
 }

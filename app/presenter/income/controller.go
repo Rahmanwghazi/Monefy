@@ -2,6 +2,7 @@ package income
 
 import (
 	"net/http"
+	"strconv"
 
 	"github.com/Rahmanwghazi/Monefy/app/middlewares"
 	"github.com/Rahmanwghazi/Monefy/app/presenter"
@@ -22,7 +23,7 @@ func NewIncomeController(incomeUseCase income.Usecase) *IncomeController {
 }
 
 func (incomeController IncomeController) Create(echoContext echo.Context) error {
-	createIncome := requests.CreateIncome{}
+	createIncome := requests.Income{}
 	err := echoContext.Bind(&createIncome)
 	if err != nil {
 		return presenter.NewErrorResponse(echoContext, http.StatusInternalServerError, err)
@@ -32,7 +33,7 @@ func (incomeController IncomeController) Create(echoContext echo.Context) error 
 	claims, err := middlewares.ExtractClaims(echoContext)
 	income.UserID = claims.ID
 
-	result, err := incomeController.IncomeUseCase.Create(income)
+	result, err := incomeController.IncomeUseCase.CreateIncome(income)
 	if err != nil {
 		return presenter.NewErrorResponse(echoContext, http.StatusInternalServerError, err)
 	}
@@ -40,7 +41,7 @@ func (incomeController IncomeController) Create(echoContext echo.Context) error 
 }
 
 func (incomeController IncomeController) GetIncome(echoContext echo.Context) error {
-	createIncome := requests.CreateIncome{}
+	createIncome := requests.Income{}
 	err := echoContext.Bind(&createIncome)
 	if err != nil {
 		return presenter.NewErrorResponse(echoContext, http.StatusInternalServerError, err)
@@ -55,4 +56,25 @@ func (incomeController IncomeController) GetIncome(echoContext echo.Context) err
 		return presenter.NewErrorResponse(echoContext, http.StatusInternalServerError, err)
 	}
 	return presenter.NewSuccessResponse(echoContext, http.StatusOK, responses.FromArrayDomain(result))
+}
+
+func (incomeController IncomeController) EditIncome(echoContext echo.Context) error {
+	income := requests.Income{}
+	err := echoContext.Bind(&income)
+	if err != nil {
+		return presenter.NewErrorResponse(echoContext, http.StatusInternalServerError, err)
+	}
+
+	editedIncome := income.ToDomain()
+	claims, err := middlewares.ExtractClaims(echoContext)
+	editedIncome.UserID = claims.ID
+
+	idstr := echoContext.Param("id")
+	id, err := strconv.Atoi(idstr)
+
+	result, err := incomeController.IncomeUseCase.EditIncome(editedIncome, uint(id))
+	if err != nil {
+		return presenter.NewErrorResponse(echoContext, http.StatusInternalServerError, err)
+	}
+	return presenter.NewSuccessResponse(echoContext, http.StatusOK, responses.FromDomain(result))
 }

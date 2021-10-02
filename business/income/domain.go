@@ -12,11 +12,13 @@ type IncomeDomain struct {
 }
 
 type Usecase interface {
-	Create(domain IncomeDomain) (IncomeDomain, error)
+	CreateIncome(domain IncomeDomain) (IncomeDomain, error)
 	GetIncome(domain IncomeDomain) ([]IncomeDomain, error)
+	EditIncome(domain IncomeDomain, id uint) (IncomeDomain, error)
 }
 
 type Repository interface {
-	Create(domain IncomeDomain) (IncomeDomain, error)
+	CreateIncome(domain IncomeDomain) (IncomeDomain, error)
 	GetIncome(domain IncomeDomain) ([]IncomeDomain, error)
+	EditIncome(domain IncomeDomain, id uint) (IncomeDomain, error)
 }
