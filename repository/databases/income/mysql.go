@@ -37,13 +37,36 @@ func (rep *mysqlIncomeRepository) GetIncome(domain income.IncomeDomain) ([]incom
 	return ToArrayDomain(incomeData, domain), nil
 }
 
-func (rep *mysqlIncomeRepository) EditIncome(domain income.IncomeDomain, id uint) (income.IncomeDomain, error) {
-	incomeData := FromDomain(domain)
-
-	result := rep.Connection.Where("ID = ?", id).Updates(&incomeData)
+func (rep *mysqlIncomeRepository) GetIncomeById(domain income.IncomeDomain, id uint) (income.IncomeDomain, error) {
+	var incomeData Income
+	result := rep.Connection.First(&incomeData, "user_id = ? AND id = ?", domain.UserID, id)
 
 	if result.Error != nil {
 		return income.IncomeDomain{}, result.Error
 	}
+
 	return incomeData.ToDomain(), nil
+}
+
+func (rep *mysqlIncomeRepository) EditIncome(domain income.IncomeDomain, id uint) (income.IncomeDomain, error) {
+	incomeData := FromDomain(domain)
+
+	result := rep.Connection.Where("ID = ? AND user_id = ?", id, domain.UserID).Updates(&incomeData)
+
+	if result.Error != nil {
+		return income.IncomeDomain{}, result.Error
+	}
+
+	return incomeData.ToDomain(), nil
+}
+
+func (rep *mysqlIncomeRepository) DeleteIncome(domain income.IncomeDomain, id uint) (string, error) {
+	var incomeData Income
+	result := rep.Connection.Delete(&incomeData, "user_id = ? AND id = ?", domain.UserID, id)
+
+	if result.Error != nil {
+		return "Failed to delete", result.Error
+	}
+
+	return "Deleted", nil
 }

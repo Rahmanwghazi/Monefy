@@ -22,7 +22,7 @@ func NewExpenseController(expenseUseCase expenses.Usecase) *ExpenseController {
 	}
 }
 
-func (expenseController ExpenseController) Create(echoContext echo.Context) error {
+func (expenseController ExpenseController) CreateExpense(echoContext echo.Context) error {
 	createExpense := requests.Expense{}
 	err := echoContext.Bind(&createExpense)
 	if err != nil {
@@ -42,20 +42,33 @@ func (expenseController ExpenseController) Create(echoContext echo.Context) erro
 
 func (expenseController ExpenseController) GetExpenses(echoContext echo.Context) error {
 	createExpense := requests.Expense{}
-	err := echoContext.Bind(&createExpense)
-	if err != nil {
-		return presenter.NewErrorResponse(echoContext, http.StatusInternalServerError, err)
-	}
 
 	expense := createExpense.ToDomain()
 	claims, err := middlewares.ExtractClaims(echoContext)
 	expense.UserID = claims.ID
 
-	result, err := expenseController.ExpenseUseCase.GetExpense(expense)
+	result, err := expenseController.ExpenseUseCase.GetExpenses(expense)
 	if err != nil {
 		return presenter.NewErrorResponse(echoContext, http.StatusInternalServerError, err)
 	}
 	return presenter.NewSuccessResponse(echoContext, http.StatusOK, responses.FromArrayDomain(result))
+}
+
+func (expenseController ExpenseController) GetExpenseById(echoContext echo.Context) error {
+	createExpense := requests.Expense{}
+
+	expense := createExpense.ToDomain()
+	claims, err := middlewares.ExtractClaims(echoContext)
+	expense.UserID = claims.ID
+
+	idParam := echoContext.Param("id")
+	id, err := strconv.Atoi(idParam)
+
+	result, err := expenseController.ExpenseUseCase.GetExpenseById(expense, uint(id))
+	if err != nil {
+		return presenter.NewErrorResponse(echoContext, http.StatusInternalServerError, err)
+	}
+	return presenter.NewSuccessResponse(echoContext, http.StatusOK, responses.FromDomain(result))
 }
 
 func (expenseController ExpenseController) EditExpense(echoContext echo.Context) error {
@@ -69,12 +82,29 @@ func (expenseController ExpenseController) EditExpense(echoContext echo.Context)
 	claims, err := middlewares.ExtractClaims(echoContext)
 	editedExpense.UserID = claims.ID
 
-	idstr := echoContext.Param("id")
-	id, err := strconv.Atoi(idstr)
+	idParam := echoContext.Param("id")
+	id, err := strconv.Atoi(idParam)
 
 	result, err := expenseController.ExpenseUseCase.EditExpense(editedExpense, uint(id))
 	if err != nil {
 		return presenter.NewErrorResponse(echoContext, http.StatusInternalServerError, err)
 	}
 	return presenter.NewSuccessResponse(echoContext, http.StatusOK, responses.FromDomain(result))
+}
+
+func (expenseController ExpenseController) DeleteExpense(echoContext echo.Context) error {
+	expense := requests.Expense{}
+
+	editedExpense := expense.ToDomain()
+	claims, err := middlewares.ExtractClaims(echoContext)
+	editedExpense.UserID = claims.ID
+
+	idParam := echoContext.Param("id")
+	id, err := strconv.Atoi(idParam)
+
+	result, err := expenseController.ExpenseUseCase.DeleteExpense(editedExpense, uint(id))
+	if err != nil {
+		return presenter.NewErrorResponse(echoContext, http.StatusInternalServerError, err)
+	}
+	return presenter.NewSuccessResponse(echoContext, http.StatusOK, result)
 }

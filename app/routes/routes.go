@@ -24,17 +24,23 @@ func (controllerList *ControllerList) Routes(echoContext *echo.Echo) {
 	withJWT := echoContext.Group("users", middleware.JWTWithConfig(controllerList.JWTMiddleware))
 	withJWT.PUT("/edit", controllerList.UserController.Edit)
 
-	withJWT.POST("/income", controllerList.IncomeController.Create)
+	withJWT.POST("/income", controllerList.IncomeController.CreateIncome)
 	withJWT.GET("/income", controllerList.IncomeController.GetIncome)
+	withJWT.GET("/income/:id", controllerList.IncomeController.GetIncomeById)
 	withJWT.PUT("/income/:id", controllerList.IncomeController.EditIncome)
+	withJWT.DELETE("/income/:id", controllerList.IncomeController.DeleteIncome)
 
-	withJWT.POST("/expense", controllerList.ExpenseController.Create)
+	withJWT.POST("/expense", controllerList.ExpenseController.CreateExpense)
 	withJWT.GET("/expenses", controllerList.ExpenseController.GetExpenses)
+	withJWT.GET("/expense/:id", controllerList.ExpenseController.GetExpenseById)
 	withJWT.PUT("/expense/:id", controllerList.ExpenseController.EditExpense)
+	withJWT.DELETE("/expense/:id", controllerList.ExpenseController.DeleteExpense)
 
-	withJWT.POST("/plan", controllerList.InvestPlanController.Create)
+	withJWT.POST("/plan", controllerList.InvestPlanController.CreatePlan)
 	withJWT.GET("/plans", controllerList.InvestPlanController.GetPlans)
 	withJWT.PUT("/plan/:id", controllerList.InvestPlanController.EditPlan)
+	withJWT.GET("/plan/:id", controllerList.InvestPlanController.GetPlanById)
+	withJWT.DELETE("/plan/:id", controllerList.InvestPlanController.DeletePlan)
 
 	//todo: add user validation for edit by id services
 }

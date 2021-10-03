@@ -22,7 +22,7 @@ func NewIncomeController(incomeUseCase income.Usecase) *IncomeController {
 	}
 }
 
-func (incomeController IncomeController) Create(echoContext echo.Context) error {
+func (incomeController IncomeController) CreateIncome(echoContext echo.Context) error {
 	createIncome := requests.Income{}
 	err := echoContext.Bind(&createIncome)
 	if err != nil {
@@ -42,10 +42,6 @@ func (incomeController IncomeController) Create(echoContext echo.Context) error 
 
 func (incomeController IncomeController) GetIncome(echoContext echo.Context) error {
 	createIncome := requests.Income{}
-	err := echoContext.Bind(&createIncome)
-	if err != nil {
-		return presenter.NewErrorResponse(echoContext, http.StatusInternalServerError, err)
-	}
 
 	income := createIncome.ToDomain()
 	claims, err := middlewares.ExtractClaims(echoContext)
@@ -56,6 +52,23 @@ func (incomeController IncomeController) GetIncome(echoContext echo.Context) err
 		return presenter.NewErrorResponse(echoContext, http.StatusInternalServerError, err)
 	}
 	return presenter.NewSuccessResponse(echoContext, http.StatusOK, responses.FromArrayDomain(result))
+}
+
+func (incomeController IncomeController) GetIncomeById(echoContext echo.Context) error {
+	createIncome := requests.Income{}
+
+	income := createIncome.ToDomain()
+	claims, err := middlewares.ExtractClaims(echoContext)
+	income.UserID = claims.ID
+
+	idParam := echoContext.Param("id")
+	id, err := strconv.Atoi(idParam)
+
+	result, err := incomeController.IncomeUseCase.GetIncomeById(income, uint(id))
+	if err != nil {
+		return presenter.NewErrorResponse(echoContext, http.StatusInternalServerError, err)
+	}
+	return presenter.NewSuccessResponse(echoContext, http.StatusOK, responses.FromDomain(result))
 }
 
 func (incomeController IncomeController) EditIncome(echoContext echo.Context) error {
@@ -69,12 +82,29 @@ func (incomeController IncomeController) EditIncome(echoContext echo.Context) er
 	claims, err := middlewares.ExtractClaims(echoContext)
 	editedIncome.UserID = claims.ID
 
-	idstr := echoContext.Param("id")
-	id, err := strconv.Atoi(idstr)
+	idParam := echoContext.Param("id")
+	id, err := strconv.Atoi(idParam)
 
 	result, err := incomeController.IncomeUseCase.EditIncome(editedIncome, uint(id))
 	if err != nil {
 		return presenter.NewErrorResponse(echoContext, http.StatusInternalServerError, err)
 	}
 	return presenter.NewSuccessResponse(echoContext, http.StatusOK, responses.FromDomain(result))
+}
+
+func (incomeController IncomeController) DeleteIncome(echoContext echo.Context) error {
+	income := requests.Income{}
+
+	editedIncome := income.ToDomain()
+	claims, err := middlewares.ExtractClaims(echoContext)
+	editedIncome.UserID = claims.ID
+
+	idParam := echoContext.Param("id")
+	id, err := strconv.Atoi(idParam)
+
+	result, err := incomeController.IncomeUseCase.DeleteIncome(editedIncome, uint(id))
+	if err != nil {
+		return presenter.NewErrorResponse(echoContext, http.StatusInternalServerError, err)
+	}
+	return presenter.NewSuccessResponse(echoContext, http.StatusOK, result)
 }
