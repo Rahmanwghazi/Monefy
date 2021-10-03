@@ -85,11 +85,19 @@ func (expenseController ExpenseController) EditExpense(echoContext echo.Context)
 	idParam := echoContext.Param("id")
 	id, err := strconv.Atoi(idParam)
 
-	result, err := expenseController.ExpenseUseCase.EditExpense(editedExpense, uint(id))
+	result, err := expenseController.ExpenseUseCase.GetExpenseById(editedExpense, uint(id))
+
 	if err != nil {
-		return presenter.NewErrorResponse(echoContext, http.StatusInternalServerError, err)
+		return presenter.NewErrorResponse(echoContext, http.StatusNotFound, err)
 	}
-	return presenter.NewSuccessResponse(echoContext, http.StatusOK, responses.FromDomain(result))
+
+	result.UserID = claims.ID
+
+	result2, err2 := expenseController.ExpenseUseCase.EditExpense(result, uint(id))
+	if err2 != nil {
+		return presenter.NewErrorResponse(echoContext, http.StatusInternalServerError, err2)
+	}
+	return presenter.NewSuccessResponse(echoContext, http.StatusOK, responses.FromDomain(result2))
 }
 
 func (expenseController ExpenseController) DeleteExpense(echoContext echo.Context) error {
@@ -102,9 +110,17 @@ func (expenseController ExpenseController) DeleteExpense(echoContext echo.Contex
 	idParam := echoContext.Param("id")
 	id, err := strconv.Atoi(idParam)
 
-	result, err := expenseController.ExpenseUseCase.DeleteExpense(editedExpense, uint(id))
+	result, err := expenseController.ExpenseUseCase.GetExpenseById(editedExpense, uint(id))
+
 	if err != nil {
+		return presenter.NewErrorResponse(echoContext, http.StatusNotFound, err)
+	}
+
+	result.UserID = claims.ID
+
+	result2, err2 := expenseController.ExpenseUseCase.DeleteExpense(result, uint(id))
+	if err2 != nil {
 		return presenter.NewErrorResponse(echoContext, http.StatusInternalServerError, err)
 	}
-	return presenter.NewSuccessResponse(echoContext, http.StatusOK, result)
+	return presenter.NewSuccessResponse(echoContext, http.StatusOK, result2)
 }

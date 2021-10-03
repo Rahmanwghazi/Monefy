@@ -85,11 +85,17 @@ func (incomeController IncomeController) EditIncome(echoContext echo.Context) er
 	idParam := echoContext.Param("id")
 	id, err := strconv.Atoi(idParam)
 
-	result, err := incomeController.IncomeUseCase.EditIncome(editedIncome, uint(id))
+	result, err := incomeController.IncomeUseCase.GetIncomeById(editedIncome, uint(id))
+
 	if err != nil {
-		return presenter.NewErrorResponse(echoContext, http.StatusInternalServerError, err)
+		return presenter.NewErrorResponse(echoContext, http.StatusNotFound, err)
 	}
-	return presenter.NewSuccessResponse(echoContext, http.StatusOK, responses.FromDomain(result))
+
+	result2, err2 := incomeController.IncomeUseCase.EditIncome(result, uint(id))
+	if err2 != nil {
+		return presenter.NewErrorResponse(echoContext, http.StatusInternalServerError, err2)
+	}
+	return presenter.NewSuccessResponse(echoContext, http.StatusOK, responses.FromDomain(result2))
 }
 
 func (incomeController IncomeController) DeleteIncome(echoContext echo.Context) error {
@@ -102,9 +108,15 @@ func (incomeController IncomeController) DeleteIncome(echoContext echo.Context) 
 	idParam := echoContext.Param("id")
 	id, err := strconv.Atoi(idParam)
 
-	result, err := incomeController.IncomeUseCase.DeleteIncome(editedIncome, uint(id))
+	result, err := incomeController.IncomeUseCase.GetIncomeById(editedIncome, uint(id))
+
 	if err != nil {
-		return presenter.NewErrorResponse(echoContext, http.StatusInternalServerError, err)
+		return presenter.NewErrorResponse(echoContext, http.StatusNotFound, err)
 	}
-	return presenter.NewSuccessResponse(echoContext, http.StatusOK, result)
+
+	result2, err2 := incomeController.IncomeUseCase.DeleteIncome(result, uint(id))
+	if err2 != nil {
+		return presenter.NewErrorResponse(echoContext, http.StatusInternalServerError, err2)
+	}
+	return presenter.NewSuccessResponse(echoContext, http.StatusOK, result2)
 }

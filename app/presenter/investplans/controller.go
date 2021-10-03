@@ -86,11 +86,19 @@ func (investPlanController InvestPlanController) EditPlan(echoContext echo.Conte
 	idParam := echoContext.Param("id")
 	id, err := strconv.Atoi(idParam)
 
-	result, err := investPlanController.InvestPlanUseCase.EditPlan(editedPlan, uint(id))
+	result, err := investPlanController.InvestPlanUseCase.GetPlanById(editedPlan, uint(id))
+
 	if err != nil {
-		return presenter.NewErrorResponse(echoContext, http.StatusInternalServerError, err)
+		return presenter.NewErrorResponse(echoContext, http.StatusNotFound, err)
 	}
-	return presenter.NewSuccessResponse(echoContext, http.StatusOK, responses.FromDomain(result))
+
+	result.UserID = claims.ID
+
+	result2, err2 := investPlanController.InvestPlanUseCase.EditPlan(result, uint(id))
+	if err2 != nil {
+		return presenter.NewErrorResponse(echoContext, http.StatusInternalServerError, err2)
+	}
+	return presenter.NewSuccessResponse(echoContext, http.StatusOK, responses.FromDomain(result2))
 }
 
 func (investPlanController InvestPlanController) DeletePlan(echoContext echo.Context) error {
@@ -103,9 +111,17 @@ func (investPlanController InvestPlanController) DeletePlan(echoContext echo.Con
 	idParam := echoContext.Param("id")
 	id, err := strconv.Atoi(idParam)
 
-	result, err := investPlanController.InvestPlanUseCase.DeletePlan(editedPlan, uint(id))
+	result, err := investPlanController.InvestPlanUseCase.GetPlanById(editedPlan, uint(id))
+
 	if err != nil {
-		return presenter.NewErrorResponse(echoContext, http.StatusInternalServerError, err)
+		return presenter.NewErrorResponse(echoContext, http.StatusNotFound, err)
 	}
-	return presenter.NewSuccessResponse(echoContext, http.StatusOK, result)
+
+	result.UserID = claims.ID
+
+	result2, err2 := investPlanController.InvestPlanUseCase.DeletePlan(result, uint(id))
+	if err2 != nil {
+		return presenter.NewErrorResponse(echoContext, http.StatusInternalServerError, err2)
+	}
+	return presenter.NewSuccessResponse(echoContext, http.StatusOK, result2)
 }
