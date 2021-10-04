@@ -4,6 +4,7 @@ import (
 	"github.com/Rahmanwghazi/Monefy/app/presenter/expenses"
 	"github.com/Rahmanwghazi/Monefy/app/presenter/income"
 	"github.com/Rahmanwghazi/Monefy/app/presenter/investplans"
+	"github.com/Rahmanwghazi/Monefy/app/presenter/products"
 	"github.com/Rahmanwghazi/Monefy/app/presenter/users"
 	"github.com/labstack/echo/v4"
 	"github.com/labstack/echo/v4/middleware"
@@ -15,6 +16,7 @@ type ControllerList struct {
 	IncomeController     income.IncomeController
 	ExpenseController    expenses.ExpenseController
 	InvestPlanController investplans.InvestPlanController
+	ProductController    products.ProductController
 }
 
 func (controllerList *ControllerList) Routes(echoContext *echo.Echo) {
@@ -36,6 +38,7 @@ func (controllerList *ControllerList) Routes(echoContext *echo.Echo) {
 	withJWT.PUT("/expense/:id", controllerList.ExpenseController.EditExpense)
 	withJWT.DELETE("/expense/:id", controllerList.ExpenseController.DeleteExpense)
 
+	withJWT.GET("/products", controllerList.ProductController.GetProducts)
 	withJWT.POST("/plan", controllerList.InvestPlanController.CreatePlan)
 	withJWT.GET("/plans", controllerList.InvestPlanController.GetPlans)
 	withJWT.PUT("/plan/:id", controllerList.InvestPlanController.EditPlan)

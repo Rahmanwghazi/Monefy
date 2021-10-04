@@ -1,4 +1,4 @@
-package ojkinvest
+package responses
 
 import (
 	"github.com/Rahmanwghazi/Monefy/business/products"
@@ -18,16 +18,18 @@ type Products struct {
 	Error interface{} `json:"error"`
 }
 
-func (productResponse *Products) toDomain() products.ProductDomain {
-	return products.ProductDomain{
-		Data: productResponse.Data,
+func FromDomain(domain products.ProductDomain) Products {
+	return Products{
+		Data: domain.Data,
 	}
 }
 
-func ToArrayDomain(productResponse []Products, domain products.ProductDomain) []products.ProductDomain {
-	result := []products.ProductDomain{}
-	for _, product := range productResponse {
-		result = append(result, product.toDomain())
+func FromArrayDomain(domain []products.ProductDomain) []Products {
+	var product []Products
+	for _, value := range domain {
+		product = append(product, Products{
+			Data: value.Data,
+		})
 	}
-	return result
+	return product
 }

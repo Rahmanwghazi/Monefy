@@ -13,6 +13,11 @@ type ProductDomain struct {
 	} `json:"data"`
 }
 
+type Usecase interface {
+	SearchProduct(domain ProductDomain) ([]ProductDomain, error)
+}
+
 type Repository interface {
 	GetProductByID(id string) (ProductDomain, error)
+	SearchProduct(domain ProductDomain) ([]ProductDomain, error)
 }
