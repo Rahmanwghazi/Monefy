@@ -12,7 +12,7 @@ func NewIncomeUsecase(repository Repository) Usecase {
 	}
 }
 
-func (usecase *IncomeUsecase) CreateIncome(income IncomeDomain) (IncomeDomain, error) {
+func (usecase *IncomeUsecase) CreateIncome(income *IncomeDomain) (IncomeDomain, error) {
 	result, err := usecase.Repo.CreateIncome(income)
 	if err != nil {
 		return IncomeDomain{}, err
@@ -20,7 +20,7 @@ func (usecase *IncomeUsecase) CreateIncome(income IncomeDomain) (IncomeDomain, e
 	return result, nil
 }
 
-func (usecase *IncomeUsecase) GetIncome(income IncomeDomain) ([]IncomeDomain, error) {
+func (usecase *IncomeUsecase) GetIncome(income *IncomeDomain) ([]IncomeDomain, error) {
 	result, err := usecase.Repo.GetIncome(income)
 	if err != nil {
 		return []IncomeDomain{}, err
@@ -28,7 +28,7 @@ func (usecase *IncomeUsecase) GetIncome(income IncomeDomain) ([]IncomeDomain, er
 	return result, nil
 }
 
-func (usecase *IncomeUsecase) GetIncomeById(income IncomeDomain, id uint) (IncomeDomain, error) {
+func (usecase *IncomeUsecase) GetIncomeById(income *IncomeDomain, id uint) (IncomeDomain, error) {
 	result, err := usecase.Repo.GetIncomeById(income, id)
 	if err != nil {
 		return IncomeDomain{}, err
@@ -36,7 +36,7 @@ func (usecase *IncomeUsecase) GetIncomeById(income IncomeDomain, id uint) (Incom
 	return result, nil
 }
 
-func (usecase *IncomeUsecase) EditIncome(income IncomeDomain, id uint) (IncomeDomain, error) {
+func (usecase *IncomeUsecase) EditIncome(income *IncomeDomain, id uint) (IncomeDomain, error) {
 	result, err := usecase.Repo.EditIncome(income, id)
 	if err != nil {
 		return IncomeDomain{}, err
@@ -44,7 +44,7 @@ func (usecase *IncomeUsecase) EditIncome(income IncomeDomain, id uint) (IncomeDo
 	return result, nil
 }
 
-func (usecase *IncomeUsecase) DeleteIncome(income IncomeDomain, id uint) (string, error) {
+func (usecase *IncomeUsecase) DeleteIncome(income *IncomeDomain, id uint) (string, error) {
 	result, err := usecase.Repo.DeleteIncome(income, id)
 	if err != nil {
 		return business.ErrorInternal.Error(), err

@@ -21,15 +21,15 @@ func NewUserUsecase(repository Repository, JWT *middlewares.ConfigJWT) Usecase {
 	}
 }
 
-func (usecase *UserUsecase) Signup(user UserDomain) (UserDomain, error) {
+func (usecase *UserUsecase) Signup(domain *UserDomain) (UserDomain, error) {
 
 	var errorHash error
-	user.HashPassword, errorHash = encrypt.HashPassword(&user.Password)
+	domain.HashPassword, errorHash = encrypt.HashPassword(domain.Password)
 	if errorHash != nil {
 		return UserDomain{}, business.ErrorInternal
 	}
 
-	user, err := usecase.Repo.Signup(user)
+	user, err := usecase.Repo.Signup(domain)
 
 	if err != nil {
 		return UserDomain{}, err
@@ -55,14 +55,14 @@ func (usecase *UserUsecase) Signin(username string, password string) (UserDomain
 	return user, nil
 }
 
-func (usecase *UserUsecase) Edit(user UserDomain) (UserDomain, error) {
+func (usecase *UserUsecase) Edit(domain *UserDomain) (UserDomain, error) {
 	var errorHash error
-	user.HashPassword, errorHash = encrypt.HashPassword(&user.Password)
+	domain.HashPassword, errorHash = encrypt.HashPassword(domain.Password)
 	if errorHash != nil {
 		return UserDomain{}, business.ErrorInternal
 	}
 
-	user, err := usecase.Repo.Edit(user)
+	user, err := usecase.Repo.Edit(domain)
 
 	if err != nil {
 		return UserDomain{}, err

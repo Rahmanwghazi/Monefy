@@ -14,8 +14,8 @@ type InvestPlan struct {
 	PlanStatus int       `json:"plan_status"`
 }
 
-func (investPlan *InvestPlan) ToDomain() investplans.InvestPlanDomain {
-	return investplans.InvestPlanDomain{
+func (investPlan *InvestPlan) ToDomain() *investplans.InvestPlanDomain {
+	return &investplans.InvestPlanDomain{
 		UserID:     investPlan.UserID,
 		ProductID:  investPlan.ProductID,
 		Total:      investPlan.Total,

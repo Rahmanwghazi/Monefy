@@ -22,14 +22,14 @@ func NewIncomeController(incomeUseCase income.Usecase) *IncomeController {
 	}
 }
 
-func (incomeController IncomeController) CreateIncome(echoContext echo.Context) error {
-	createIncome := requests.Income{}
-	err := echoContext.Bind(&createIncome)
+func (incomeController *IncomeController) CreateIncome(echoContext echo.Context) error {
+	request := requests.Income{}
+	err := echoContext.Bind(&request)
 	if err != nil {
 		return presenter.NewErrorResponse(echoContext, http.StatusInternalServerError, err)
 	}
 
-	income := createIncome.ToDomain()
+	income := request.ToDomain()
 	claims, err := middlewares.ExtractClaims(echoContext)
 	income.UserID = claims.ID
 
@@ -40,10 +40,10 @@ func (incomeController IncomeController) CreateIncome(echoContext echo.Context) 
 	return presenter.NewSuccessResponse(echoContext, http.StatusOK, responses.FromDomain(result))
 }
 
-func (incomeController IncomeController) GetIncome(echoContext echo.Context) error {
-	createIncome := requests.Income{}
+func (incomeController *IncomeController) GetIncome(echoContext echo.Context) error {
+	request := requests.Income{}
 
-	income := createIncome.ToDomain()
+	income := request.ToDomain()
 	claims, err := middlewares.ExtractClaims(echoContext)
 	income.UserID = claims.ID
 
@@ -54,10 +54,10 @@ func (incomeController IncomeController) GetIncome(echoContext echo.Context) err
 	return presenter.NewSuccessResponse(echoContext, http.StatusOK, responses.FromArrayDomain(result))
 }
 
-func (incomeController IncomeController) GetIncomeById(echoContext echo.Context) error {
-	createIncome := requests.Income{}
+func (incomeController *IncomeController) GetIncomeById(echoContext echo.Context) error {
+	request := requests.Income{}
 
-	income := createIncome.ToDomain()
+	income := request.ToDomain()
 	claims, err := middlewares.ExtractClaims(echoContext)
 	income.UserID = claims.ID
 
@@ -71,37 +71,31 @@ func (incomeController IncomeController) GetIncomeById(echoContext echo.Context)
 	return presenter.NewSuccessResponse(echoContext, http.StatusOK, responses.FromDomain(result))
 }
 
-func (incomeController IncomeController) EditIncome(echoContext echo.Context) error {
-	income := requests.Income{}
-	err := echoContext.Bind(&income)
+func (incomeController *IncomeController) EditIncome(echoContext echo.Context) error {
+	request := requests.Income{}
+	err := echoContext.Bind(&request)
 	if err != nil {
 		return presenter.NewErrorResponse(echoContext, http.StatusInternalServerError, err)
 	}
 
-	editedIncome := income.ToDomain()
+	editedIncome := request.ToDomain()
 	claims, err := middlewares.ExtractClaims(echoContext)
 	editedIncome.UserID = claims.ID
 
 	idParam := echoContext.Param("id")
 	id, err := strconv.Atoi(idParam)
 
-	result, err := incomeController.IncomeUseCase.GetIncomeById(editedIncome, uint(id))
-
-	if err != nil {
-		return presenter.NewErrorResponse(echoContext, http.StatusNotFound, err)
-	}
-
-	result2, err2 := incomeController.IncomeUseCase.EditIncome(result, uint(id))
+	result2, err2 := incomeController.IncomeUseCase.EditIncome(editedIncome, uint(id))
 	if err2 != nil {
 		return presenter.NewErrorResponse(echoContext, http.StatusInternalServerError, err2)
 	}
 	return presenter.NewSuccessResponse(echoContext, http.StatusOK, responses.FromDomain(result2))
 }
 
-func (incomeController IncomeController) DeleteIncome(echoContext echo.Context) error {
-	income := requests.Income{}
+func (incomeController *IncomeController) DeleteIncome(echoContext echo.Context) error {
+	request := requests.Income{}
 
-	editedIncome := income.ToDomain()
+	editedIncome := request.ToDomain()
 	claims, err := middlewares.ExtractClaims(echoContext)
 	editedIncome.UserID = claims.ID
 
@@ -114,7 +108,7 @@ func (incomeController IncomeController) DeleteIncome(echoContext echo.Context) 
 		return presenter.NewErrorResponse(echoContext, http.StatusNotFound, err)
 	}
 
-	result2, err2 := incomeController.IncomeUseCase.DeleteIncome(result, uint(id))
+	result2, err2 := incomeController.IncomeUseCase.DeleteIncome(&result, uint(id))
 	if err2 != nil {
 		return presenter.NewErrorResponse(echoContext, http.StatusInternalServerError, err2)
 	}

@@ -38,8 +38,8 @@ func (user *User) ToDomain() users.UserDomain {
 	}
 }
 
-func FromDomain(domain users.UserDomain) User {
-	return User{
+func FromDomain(domain users.UserDomain) *User {
+	return &User{
 		ID:           domain.ID,
 		Username:     domain.Username,
 		Email:        domain.Email,

@@ -15,8 +15,8 @@ func NewMysqlUserRepository(connection *gorm.DB) users.Repository {
 	}
 }
 
-func (rep *mysqlUserRepository) Signup(domain users.UserDomain) (users.UserDomain, error) {
-	user := FromDomain(domain)
+func (rep *mysqlUserRepository) Signup(domain *users.UserDomain) (users.UserDomain, error) {
+	user := FromDomain(*domain)
 
 	result := rep.Connection.Create(&user)
 
@@ -37,8 +37,8 @@ func (repository *mysqlUserRepository) Signin(username string) (users.UserDomain
 	return user.ToDomain(), nil
 }
 
-func (rep *mysqlUserRepository) Edit(domain users.UserDomain) (users.UserDomain, error) {
-	user := FromDomain(domain)
+func (rep *mysqlUserRepository) Edit(domain *users.UserDomain) (users.UserDomain, error) {
+	user := FromDomain(*domain)
 
 	result := rep.Connection.Updates(user).Where(&user, "ID = ?", domain.ID)
 

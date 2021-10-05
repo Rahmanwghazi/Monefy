@@ -18,13 +18,13 @@ type UserDomain struct {
 }
 
 type Usecase interface {
-	Signup(domain UserDomain) (UserDomain, error)
+	Signup(domain *UserDomain) (UserDomain, error)
 	Signin(username string, password string) (UserDomain, error)
-	Edit(domain UserDomain) (UserDomain, error)
+	Edit(domain *UserDomain) (UserDomain, error)
 }
 
 type Repository interface {
-	Signup(domain UserDomain) (UserDomain, error)
+	Signup(domain *UserDomain) (UserDomain, error)
 	Signin(username string) (UserDomain, error)
-	Edit(domain UserDomain) (UserDomain, error)
+	Edit(domain *UserDomain) (UserDomain, error)
 }

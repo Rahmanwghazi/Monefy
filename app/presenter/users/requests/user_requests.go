@@ -14,8 +14,8 @@ type User struct {
 	Dob      time.Time `json:"dob"`
 }
 
-func (User *User) ToDomain() users.UserDomain {
-	return users.UserDomain{
+func (User *User) ToDomain() *users.UserDomain {
+	return &users.UserDomain{
 		Username: User.Username,
 		Email:    User.Email,
 		Password: User.Password,

@@ -15,8 +15,8 @@ func NewMysqlExpenseRepository(connection *gorm.DB) expenses.Repository {
 	}
 }
 
-func (rep *mysqlExpenseRepository) CreateExpense(domain expenses.ExpenseDomain) (expenses.ExpenseDomain, error) {
-	expenseData := FromDomain(domain)
+func (rep *mysqlExpenseRepository) CreateExpense(domain *expenses.ExpenseDomain) (expenses.ExpenseDomain, error) {
+	expenseData := FromDomain(*domain)
 	result := rep.Connection.Create(&expenseData)
 
 	if result.Error != nil {
@@ -26,7 +26,7 @@ func (rep *mysqlExpenseRepository) CreateExpense(domain expenses.ExpenseDomain) 
 	return expenseData.ToDomain(), nil
 }
 
-func (rep *mysqlExpenseRepository) GetExpenses(domain expenses.ExpenseDomain) ([]expenses.ExpenseDomain, error) {
+func (rep *mysqlExpenseRepository) GetExpenses(domain *expenses.ExpenseDomain) ([]expenses.ExpenseDomain, error) {
 	var expenseData []Expense
 	result := rep.Connection.Find(&expenseData, "user_id = ?", domain.UserID)
 
@@ -34,10 +34,10 @@ func (rep *mysqlExpenseRepository) GetExpenses(domain expenses.ExpenseDomain) ([
 		return []expenses.ExpenseDomain{}, result.Error
 	}
 
-	return ToArrayDomain(expenseData, domain), nil
+	return ToArrayDomain(expenseData, *domain), nil
 }
 
-func (rep *mysqlExpenseRepository) GetExpenseById(domain expenses.ExpenseDomain, id uint) (expenses.ExpenseDomain, error) {
+func (rep *mysqlExpenseRepository) GetExpenseById(domain *expenses.ExpenseDomain, id uint) (expenses.ExpenseDomain, error) {
 	var expenseData Expense
 	result := rep.Connection.First(&expenseData, "user_id = ? AND id = ?", domain.UserID, id)
 
@@ -48,8 +48,8 @@ func (rep *mysqlExpenseRepository) GetExpenseById(domain expenses.ExpenseDomain,
 	return expenseData.ToDomain(), nil
 }
 
-func (rep *mysqlExpenseRepository) EditExpense(domain expenses.ExpenseDomain, id uint) (expenses.ExpenseDomain, error) {
-	expenseData := FromDomain(domain)
+func (rep *mysqlExpenseRepository) EditExpense(domain *expenses.ExpenseDomain, id uint) (expenses.ExpenseDomain, error) {
+	expenseData := FromDomain(*domain)
 
 	result := rep.Connection.Where("ID = ? AND user_id = ?", id, domain.UserID).Updates(&expenseData)
 
@@ -60,7 +60,7 @@ func (rep *mysqlExpenseRepository) EditExpense(domain expenses.ExpenseDomain, id
 	return expenseData.ToDomain(), nil
 }
 
-func (rep *mysqlExpenseRepository) DeleteExpense(domain expenses.ExpenseDomain, id uint) (string, error) {
+func (rep *mysqlExpenseRepository) DeleteExpense(domain *expenses.ExpenseDomain, id uint) (string, error) {
 	var expenseData Expense
 	result := rep.Connection.Delete(&expenseData, "user_id = ? AND id = ?", domain.UserID, id)
 

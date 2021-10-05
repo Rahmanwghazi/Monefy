@@ -4,7 +4,7 @@ import (
 	"net/http"
 
 	"github.com/Rahmanwghazi/Monefy/app/middlewares"
-	controllers "github.com/Rahmanwghazi/Monefy/app/presenter"
+	"github.com/Rahmanwghazi/Monefy/app/presenter"
 	"github.com/Rahmanwghazi/Monefy/app/presenter/users/requests"
 	"github.com/Rahmanwghazi/Monefy/app/presenter/users/responses/edit"
 	"github.com/Rahmanwghazi/Monefy/app/presenter/users/responses/signin"
@@ -23,52 +23,52 @@ func NewUserController(userUseCase users.Usecase) *UserController {
 	}
 }
 
-func (userController UserController) Signup(echoContext echo.Context) error {
-	userSignup := requests.User{}
-	err := echoContext.Bind(&userSignup)
+func (userController *UserController) Signup(echoContext echo.Context) error {
+	request := requests.User{}
+	err := echoContext.Bind(&request)
 	if err != nil {
-		return controllers.NewErrorResponse(echoContext, http.StatusInternalServerError, err)
+		return presenter.NewErrorResponse(echoContext, http.StatusInternalServerError, err)
 	}
 
-	user, err := userController.UserUseCase.Signup(userSignup.ToDomain())
+	user, err := userController.UserUseCase.Signup(request.ToDomain())
 
 	if err != nil {
-		return controllers.NewErrorResponse(echoContext, http.StatusBadRequest, err)
+		return presenter.NewErrorResponse(echoContext, http.StatusBadRequest, err)
 	}
 
-	return controllers.NewSuccessResponse(echoContext, http.StatusCreated, signup.FromDomain(user))
+	return presenter.NewSuccessResponse(echoContext, http.StatusCreated, signup.FromDomain(user))
 }
 
-func (userController UserController) Signin(echoContext echo.Context) error {
-	userSignin := requests.User{}
-	err := echoContext.Bind(&userSignin)
+func (userController *UserController) Signin(echoContext echo.Context) error {
+	request := requests.User{}
+	err := echoContext.Bind(&request)
 	if err != nil {
-		return controllers.NewErrorResponse(echoContext, http.StatusInternalServerError, err)
+		return presenter.NewErrorResponse(echoContext, http.StatusInternalServerError, err)
 	}
 
-	user, err := userController.UserUseCase.Signin(userSignin.ToDomain().Username, userSignin.ToDomain().Password)
+	user, err := userController.UserUseCase.Signin(request.ToDomain().Username, request.ToDomain().Password)
 	if err != nil {
-		return controllers.NewErrorResponse(echoContext, http.StatusBadRequest, err)
+		return presenter.NewErrorResponse(echoContext, http.StatusBadRequest, err)
 	}
 
-	return controllers.NewSuccessResponse(echoContext, http.StatusOK, signin.FromDomain(user))
+	return presenter.NewSuccessResponse(echoContext, http.StatusOK, signin.FromDomain(user))
 }
 
-func (userController UserController) Edit(echoContext echo.Context) error {
-	userEdit := requests.User{}
-	err := echoContext.Bind(&userEdit)
+func (userController *UserController) Edit(echoContext echo.Context) error {
+	request := requests.User{}
+	err := echoContext.Bind(&request)
 	if err != nil {
-		return controllers.NewErrorResponse(echoContext, http.StatusInternalServerError, err)
+		return presenter.NewErrorResponse(echoContext, http.StatusInternalServerError, err)
 	}
 
-	userEdited := userEdit.ToDomain()
+	userEdited := request.ToDomain()
 	claims, err := middlewares.ExtractClaims(echoContext)
 	userEdited.ID = claims.ID
 
 	result, err := userController.UserUseCase.Edit(userEdited)
 	if err != nil {
-		return controllers.NewErrorResponse(echoContext, http.StatusBadRequest, err)
+		return presenter.NewErrorResponse(echoContext, http.StatusBadRequest, err)
 	}
 
-	return controllers.NewSuccessResponse(echoContext, http.StatusCreated, edit.FromDomain(result))
+	return presenter.NewSuccessResponse(echoContext, http.StatusCreated, edit.FromDomain(result))
 }

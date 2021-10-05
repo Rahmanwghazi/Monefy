@@ -22,7 +22,7 @@ func NewInvestPlanController(investPlanUseCase investplans.Usecase) *InvestPlanC
 	}
 }
 
-func (investPlanController InvestPlanController) CreatePlan(echoContext echo.Context) error {
+func (investPlanController *InvestPlanController) CreatePlan(echoContext echo.Context) error {
 	request := requests.InvestPlan{}
 
 	if err := echoContext.Bind(&request); err != nil {
@@ -41,10 +41,10 @@ func (investPlanController InvestPlanController) CreatePlan(echoContext echo.Con
 	return presenter.NewSuccessResponse(echoContext, http.StatusOK, responses.FromDomain(response))
 }
 
-func (investPlanController InvestPlanController) GetPlans(echoContext echo.Context) error {
-	investPlanData := requests.InvestPlan{}
+func (investPlanController *InvestPlanController) GetPlans(echoContext echo.Context) error {
+	request := requests.InvestPlan{}
 
-	investplans := investPlanData.ToDomain()
+	investplans := request.ToDomain()
 	claims, err := middlewares.ExtractClaims(echoContext)
 	investplans.UserID = claims.ID
 
@@ -55,10 +55,10 @@ func (investPlanController InvestPlanController) GetPlans(echoContext echo.Conte
 	return presenter.NewSuccessResponse(echoContext, http.StatusOK, responses.FromArrayDomain(result))
 }
 
-func (investPlanController InvestPlanController) GetPlanById(echoContext echo.Context) error {
-	investPlanData := requests.InvestPlan{}
+func (investPlanController *InvestPlanController) GetPlanById(echoContext echo.Context) error {
+	request := requests.InvestPlan{}
 
-	investplans := investPlanData.ToDomain()
+	investplans := request.ToDomain()
 	claims, err := middlewares.ExtractClaims(echoContext)
 	investplans.UserID = claims.ID
 
@@ -73,38 +73,30 @@ func (investPlanController InvestPlanController) GetPlanById(echoContext echo.Co
 }
 
 func (investPlanController InvestPlanController) EditPlan(echoContext echo.Context) error {
-	investPlan := requests.InvestPlan{}
-	err := echoContext.Bind(&investPlan)
+	request := requests.InvestPlan{}
+	err := echoContext.Bind(&request)
 	if err != nil {
 		return presenter.NewErrorResponse(echoContext, http.StatusInternalServerError, err)
 	}
 
-	editedPlan := investPlan.ToDomain()
+	editedPlan := request.ToDomain()
 	claims, err := middlewares.ExtractClaims(echoContext)
 	editedPlan.UserID = claims.ID
 
 	idParam := echoContext.Param("id")
 	id, err := strconv.Atoi(idParam)
 
-	result, err := investPlanController.InvestPlanUseCase.GetPlanById(editedPlan, uint(id))
-
-	if err != nil {
-		return presenter.NewErrorResponse(echoContext, http.StatusNotFound, err)
-	}
-
-	result.UserID = claims.ID
-
-	result2, err2 := investPlanController.InvestPlanUseCase.EditPlan(result, uint(id))
+	result2, err2 := investPlanController.InvestPlanUseCase.EditPlan(editedPlan, uint(id))
 	if err2 != nil {
 		return presenter.NewErrorResponse(echoContext, http.StatusInternalServerError, err2)
 	}
 	return presenter.NewSuccessResponse(echoContext, http.StatusOK, responses.FromDomain(result2))
 }
 
-func (investPlanController InvestPlanController) DeletePlan(echoContext echo.Context) error {
-	investPlan := requests.InvestPlan{}
+func (investPlanController *InvestPlanController) DeletePlan(echoContext echo.Context) error {
+	request := requests.InvestPlan{}
 
-	editedPlan := investPlan.ToDomain()
+	editedPlan := request.ToDomain()
 	claims, err := middlewares.ExtractClaims(echoContext)
 	editedPlan.UserID = claims.ID
 
@@ -119,7 +111,7 @@ func (investPlanController InvestPlanController) DeletePlan(echoContext echo.Con
 
 	result.UserID = claims.ID
 
-	result2, err2 := investPlanController.InvestPlanUseCase.DeletePlan(result, uint(id))
+	result2, err2 := investPlanController.InvestPlanUseCase.DeletePlan(&result, uint(id))
 	if err2 != nil {
 		return presenter.NewErrorResponse(echoContext, http.StatusInternalServerError, err2)
 	}

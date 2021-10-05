@@ -3,6 +3,7 @@ package investplans
 import (
 	"encoding/json"
 	"log"
+	"strconv"
 	"strings"
 
 	"github.com/Rahmanwghazi/Monefy/business"
@@ -21,7 +22,7 @@ func NewInvestPlanUsecase(repository Repository, product products.Repository) Us
 	}
 }
 
-func (usecase *InvestPlanUsecase) Create(idProduct string, domain InvestPlanDomain) (InvestPlanDomain, error) {
+func (usecase *InvestPlanUsecase) Create(idProduct string, domain *InvestPlanDomain) (InvestPlanDomain, error) {
 
 	product, err := usecase.Product.GetProductByID(idProduct)
 	if strings.TrimSpace(idProduct) != "" {
@@ -42,7 +43,7 @@ func (usecase *InvestPlanUsecase) Create(idProduct string, domain InvestPlanDoma
 	return result, nil
 }
 
-func (usecase *InvestPlanUsecase) GetPlans(domain InvestPlanDomain) ([]InvestPlanDomain, error) {
+func (usecase *InvestPlanUsecase) GetPlans(domain *InvestPlanDomain) ([]InvestPlanDomain, error) {
 	result, err := usecase.Repo.GetPlans(domain)
 	if err != nil {
 		return []InvestPlanDomain{}, err
@@ -50,7 +51,7 @@ func (usecase *InvestPlanUsecase) GetPlans(domain InvestPlanDomain) ([]InvestPla
 	return result, nil
 }
 
-func (usecase *InvestPlanUsecase) GetPlanById(domain InvestPlanDomain, id uint) (InvestPlanDomain, error) {
+func (usecase *InvestPlanUsecase) GetPlanById(domain *InvestPlanDomain, id uint) (InvestPlanDomain, error) {
 	result, err := usecase.Repo.GetPlanById(domain, id)
 	if err != nil {
 		return InvestPlanDomain{}, err
@@ -58,7 +59,20 @@ func (usecase *InvestPlanUsecase) GetPlanById(domain InvestPlanDomain, id uint) 
 	return result, nil
 }
 
-func (usecase *InvestPlanUsecase) EditPlan(domain InvestPlanDomain, id uint) (InvestPlanDomain, error) {
+func (usecase *InvestPlanUsecase) EditPlan(domain *InvestPlanDomain, id uint) (InvestPlanDomain, error) {
+	idProduct := strconv.Itoa(domain.ProductID)
+	product, err := usecase.Product.GetProductByID(idProduct)
+	if strings.TrimSpace(idProduct) != "" {
+		if err != nil {
+			log.Default().Printf("%+v", err)
+		}
+		jsonMarshal, err := json.Marshal(product)
+		if err != nil {
+			log.Default().Printf("%+v", err)
+		}
+		domain.Description = string(jsonMarshal)
+	}
+
 	result, err := usecase.Repo.EditPlan(domain, id)
 	if err != nil {
 		return InvestPlanDomain{}, err
@@ -66,7 +80,7 @@ func (usecase *InvestPlanUsecase) EditPlan(domain InvestPlanDomain, id uint) (In
 	return result, nil
 }
 
-func (usecase *InvestPlanUsecase) DeletePlan(domain InvestPlanDomain, id uint) (string, error) {
+func (usecase *InvestPlanUsecase) DeletePlan(domain *InvestPlanDomain, id uint) (string, error) {
 	result, err := usecase.Repo.DeletePlan(domain, id)
 	if err != nil {
 		return business.ErrorInternal.Error(), err

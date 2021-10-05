@@ -2,8 +2,8 @@ package encrypt
 
 import "golang.org/x/crypto/bcrypt"
 
-func HashPassword(password *string) (string, error) {
-	passwordBytes := []byte(*password)
+func HashPassword(password string) (string, error) {
+	passwordBytes := []byte(password)
 	hashedPassword, err := bcrypt.GenerateFromPassword(passwordBytes, bcrypt.MinCost)
 	return string(hashedPassword), err
 }

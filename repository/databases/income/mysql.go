@@ -15,8 +15,8 @@ func NewMysqlIncomeRepository(connection *gorm.DB) income.Repository {
 	}
 }
 
-func (rep *mysqlIncomeRepository) CreateIncome(domain income.IncomeDomain) (income.IncomeDomain, error) {
-	incomeData := FromDomain(domain)
+func (rep *mysqlIncomeRepository) CreateIncome(domain *income.IncomeDomain) (income.IncomeDomain, error) {
+	incomeData := FromDomain(*domain)
 	result := rep.Connection.Create(&incomeData)
 
 	if result.Error != nil {
@@ -26,7 +26,7 @@ func (rep *mysqlIncomeRepository) CreateIncome(domain income.IncomeDomain) (inco
 	return incomeData.ToDomain(), nil
 }
 
-func (rep *mysqlIncomeRepository) GetIncome(domain income.IncomeDomain) ([]income.IncomeDomain, error) {
+func (rep *mysqlIncomeRepository) GetIncome(domain *income.IncomeDomain) ([]income.IncomeDomain, error) {
 	var incomeData []Income
 	result := rep.Connection.Find(&incomeData, "user_id = ?", domain.UserID)
 
@@ -34,10 +34,10 @@ func (rep *mysqlIncomeRepository) GetIncome(domain income.IncomeDomain) ([]incom
 		return []income.IncomeDomain{}, result.Error
 	}
 
-	return ToArrayDomain(incomeData, domain), nil
+	return ToArrayDomain(incomeData, *domain), nil
 }
 
-func (rep *mysqlIncomeRepository) GetIncomeById(domain income.IncomeDomain, id uint) (income.IncomeDomain, error) {
+func (rep *mysqlIncomeRepository) GetIncomeById(domain *income.IncomeDomain, id uint) (income.IncomeDomain, error) {
 	var incomeData Income
 	result := rep.Connection.First(&incomeData, "user_id = ? AND id = ?", domain.UserID, id)
 
@@ -48,8 +48,8 @@ func (rep *mysqlIncomeRepository) GetIncomeById(domain income.IncomeDomain, id u
 	return incomeData.ToDomain(), nil
 }
 
-func (rep *mysqlIncomeRepository) EditIncome(domain income.IncomeDomain, id uint) (income.IncomeDomain, error) {
-	incomeData := FromDomain(domain)
+func (rep *mysqlIncomeRepository) EditIncome(domain *income.IncomeDomain, id uint) (income.IncomeDomain, error) {
+	incomeData := FromDomain(*domain)
 
 	result := rep.Connection.Where("ID = ? AND user_id = ?", id, domain.UserID).Updates(&incomeData)
 
@@ -60,7 +60,7 @@ func (rep *mysqlIncomeRepository) EditIncome(domain income.IncomeDomain, id uint
 	return incomeData.ToDomain(), nil
 }
 
-func (rep *mysqlIncomeRepository) DeleteIncome(domain income.IncomeDomain, id uint) (string, error) {
+func (rep *mysqlIncomeRepository) DeleteIncome(domain *income.IncomeDomain, id uint) (string, error) {
 	var incomeData Income
 	result := rep.Connection.Delete(&incomeData, "user_id = ? AND id = ?", domain.UserID, id)
 
