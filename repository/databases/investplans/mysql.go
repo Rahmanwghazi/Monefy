@@ -26,6 +26,17 @@ func (rep *mysqlInvestPlanRepository) Create(domain investplans.InvestPlanDomain
 	return investPlanData.ToDomain(), nil
 }
 
+func (rep *mysqlInvestPlanRepository) GetProducts(domain investplans.InvestPlanDomain) ([]investplans.InvestPlanDomain, error) {
+	var product []InvestPlan
+	result := rep.Connection.Find(&product)
+
+	if result.Error != nil {
+		return []investplans.InvestPlanDomain{}, result.Error
+	}
+
+	return ToArrayDomain(product, domain), nil
+}
+
 func (rep *mysqlInvestPlanRepository) GetPlans(domain investplans.InvestPlanDomain) ([]investplans.InvestPlanDomain, error) {
 	var planData []InvestPlan
 	result := rep.Connection.Find(&planData, "user_id = ?", domain.UserID)

@@ -8,4 +8,5 @@ var (
 	ErrorDuplicateUsername = errors.New("Username has already been taken")
 	ErrorDuplicateEmail    = errors.New("Email has already been taken")
 	ErrorInternal          = errors.New("An Error Has Occured ")
+	ErrorEmpty             = errors.New("The Field cannot be empty ")
 )
