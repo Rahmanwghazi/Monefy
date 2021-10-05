@@ -17,6 +17,8 @@ type InvestPlanDomain struct {
 type Usecase interface {
 	Create(idProduct string, domain *InvestPlanDomain) (InvestPlanDomain, error)
 	GetPlans(domain *InvestPlanDomain) ([]InvestPlanDomain, error)
+	GetfinishedPlans(domain *InvestPlanDomain) ([]InvestPlanDomain, error)
+	GetUnfinishedPlans(domain *InvestPlanDomain) ([]InvestPlanDomain, error)
 	GetPlanById(domain *InvestPlanDomain, id uint) (InvestPlanDomain, error)
 	EditPlan(domain *InvestPlanDomain, id uint) (InvestPlanDomain, error)
 	DeletePlan(domain *InvestPlanDomain, id uint) (string, error)
@@ -25,6 +27,8 @@ type Usecase interface {
 type Repository interface {
 	Create(domain *InvestPlanDomain) (InvestPlanDomain, error)
 	GetPlans(domain *InvestPlanDomain) ([]InvestPlanDomain, error)
+	GetfinishedPlans(domain *InvestPlanDomain) ([]InvestPlanDomain, error)
+	GetUnfinishedPlans(domain *InvestPlanDomain) ([]InvestPlanDomain, error)
 	GetPlanById(domain *InvestPlanDomain, id uint) (InvestPlanDomain, error)
 	EditPlan(domain *InvestPlanDomain, id uint) (InvestPlanDomain, error)
 	DeletePlan(domain *InvestPlanDomain, id uint) (string, error)
