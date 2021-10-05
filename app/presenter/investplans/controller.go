@@ -55,6 +55,34 @@ func (investPlanController *InvestPlanController) GetPlans(echoContext echo.Cont
 	return presenter.NewSuccessResponse(echoContext, http.StatusOK, responses.FromArrayDomain(result))
 }
 
+func (investPlanController *InvestPlanController) GetUnfinishedPlans(echoContext echo.Context) error {
+	request := requests.InvestPlan{}
+
+	investplans := request.ToDomain()
+	claims, err := middlewares.ExtractClaims(echoContext)
+	investplans.UserID = claims.ID
+
+	result, err := investPlanController.InvestPlanUseCase.GetUnfinishedPlans(investplans)
+	if err != nil {
+		return presenter.NewErrorResponse(echoContext, http.StatusInternalServerError, err)
+	}
+	return presenter.NewSuccessResponse(echoContext, http.StatusOK, responses.FromArrayDomain(result))
+}
+
+func (investPlanController *InvestPlanController) GetfinishedPlans(echoContext echo.Context) error {
+	request := requests.InvestPlan{}
+
+	investplans := request.ToDomain()
+	claims, err := middlewares.ExtractClaims(echoContext)
+	investplans.UserID = claims.ID
+
+	result, err := investPlanController.InvestPlanUseCase.GetfinishedPlans(investplans)
+	if err != nil {
+		return presenter.NewErrorResponse(echoContext, http.StatusInternalServerError, err)
+	}
+	return presenter.NewSuccessResponse(echoContext, http.StatusOK, responses.FromArrayDomain(result))
+}
+
 func (investPlanController *InvestPlanController) GetPlanById(echoContext echo.Context) error {
 	request := requests.InvestPlan{}
 

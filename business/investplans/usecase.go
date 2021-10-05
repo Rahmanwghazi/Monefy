@@ -51,6 +51,22 @@ func (usecase *InvestPlanUsecase) GetPlans(domain *InvestPlanDomain) ([]InvestPl
 	return result, nil
 }
 
+func (usecase *InvestPlanUsecase) GetUnfinishedPlans(domain *InvestPlanDomain) ([]InvestPlanDomain, error) {
+	result, err := usecase.Repo.GetUnfinishedPlans(domain)
+	if err != nil {
+		return []InvestPlanDomain{}, err
+	}
+	return result, nil
+}
+
+func (usecase *InvestPlanUsecase) GetfinishedPlans(domain *InvestPlanDomain) ([]InvestPlanDomain, error) {
+	result, err := usecase.Repo.GetfinishedPlans(domain)
+	if err != nil {
+		return []InvestPlanDomain{}, err
+	}
+	return result, nil
+}
+
 func (usecase *InvestPlanUsecase) GetPlanById(domain *InvestPlanDomain, id uint) (InvestPlanDomain, error) {
 	result, err := usecase.Repo.GetPlanById(domain, id)
 	if err != nil {

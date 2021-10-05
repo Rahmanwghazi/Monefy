@@ -37,6 +37,34 @@ func (rep *mysqlInvestPlanRepository) GetPlans(domain *investplans.InvestPlanDom
 	return ToArrayDomain(planData, *domain), nil
 }
 
+func (rep *mysqlInvestPlanRepository) GetUnfinishedPlans(domain *investplans.InvestPlanDomain) ([]investplans.InvestPlanDomain, error) {
+	var planData []InvestPlan
+
+	//unfinished = 1 ; finished = 2
+	unfinished := 1
+	result := rep.Connection.Find(&planData, "user_id = ? AND plan_status = ?", domain.UserID, unfinished)
+
+	if result.Error != nil {
+		return []investplans.InvestPlanDomain{}, result.Error
+	}
+
+	return ToArrayDomain(planData, *domain), nil
+}
+
+func (rep *mysqlInvestPlanRepository) GetfinishedPlans(domain *investplans.InvestPlanDomain) ([]investplans.InvestPlanDomain, error) {
+	var planData []InvestPlan
+
+	//unfinished = 1 ; finished = 2
+	finished := 2
+	result := rep.Connection.Find(&planData, "user_id = ? AND plan_status = ?", domain.UserID, finished)
+
+	if result.Error != nil {
+		return []investplans.InvestPlanDomain{}, result.Error
+	}
+
+	return ToArrayDomain(planData, *domain), nil
+}
+
 func (rep *mysqlInvestPlanRepository) GetPlanById(domain *investplans.InvestPlanDomain, id uint) (investplans.InvestPlanDomain, error) {
 	var planData InvestPlan
 	result := rep.Connection.First(&planData, "user_id = ? AND ID = ? ", domain.UserID, id)

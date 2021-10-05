@@ -38,9 +38,9 @@ func (controllerList *ControllerList) Routes(echoContext *echo.Echo) {
 
 	withJWT.POST("/plan", controllerList.InvestPlanController.CreatePlan)
 	withJWT.GET("/plans", controllerList.InvestPlanController.GetPlans)
+	withJWT.GET("/plans/unfinished", controllerList.InvestPlanController.GetUnfinishedPlans)
+	withJWT.GET("/plans/finished", controllerList.InvestPlanController.GetfinishedPlans)
 	withJWT.PUT("/plan/:id", controllerList.InvestPlanController.EditPlan)
 	withJWT.GET("/plan/:id", controllerList.InvestPlanController.GetPlanById)
 	withJWT.DELETE("/plan/:id", controllerList.InvestPlanController.DeletePlan)
-
-	//todo: add user validation for edit by id services
 }
