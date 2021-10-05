@@ -23,11 +23,3 @@ func (productResponse *Products) toDomain() products.ProductDomain {
 		Data: productResponse.Data,
 	}
 }
-
-func ToArrayDomain(productResponse []Products, domain products.ProductDomain) []products.ProductDomain {
-	result := []products.ProductDomain{}
-	for _, product := range productResponse {
-		result = append(result, product.toDomain())
-	}
-	return result
-}

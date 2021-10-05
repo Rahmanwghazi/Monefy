@@ -68,6 +68,7 @@ func main() {
 	DBMigration(connection)
 
 	echo := echo.New()
+	middlewares.LogMiddleware(echo)
 
 	productRepository := _productRepository.NewOJKAPI()
 
