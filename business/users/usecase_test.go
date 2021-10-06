@@ -16,7 +16,6 @@ var (
 	mockUserRepository _userMock.Repository
 	userDomain         users.UserDomain
 	userUsecase        users.Usecase
-	JWT                *middlewares.ConfigJWT
 )
 
 func TestMain(m *testing.M) {
@@ -52,8 +51,8 @@ func TestSignup(t *testing.T) {
 		assert.Equal(t, userDomain, result)
 	})
 
-	t.Run("Test case 2 - Invalid (double email)", func(t *testing.T) {
-		mockUserRepository.On("Signup", mock.Anything).Return(userDomain, nil).Once()
+	t.Run("Test case 2 - Invalid (duplicate email)", func(t *testing.T) {
+		mockUserRepository.On("Signup", mock.Anything).Return(users.UserDomain{}, assert.AnError).Once()
 
 		input := users.UserDomain{
 			ID:       1,
@@ -65,8 +64,8 @@ func TestSignup(t *testing.T) {
 		}
 
 		result, err := userUsecase.Signup(&input)
-		assert.Nil(t, err)
-		assert.Equal(t, userDomain, result)
+		assert.NotNil(t, err)
+		assert.NotEqual(t, userDomain, result)
 	})
 }
 
@@ -87,7 +86,6 @@ func TestSignin(t *testing.T) {
 
 	t.Run("Test case 2 - Invalid (wrong username/password)", func(t *testing.T) {
 		mockUserRepository.On("Signin", mock.AnythingOfType("string")).Return(userDomain, nil).Once()
-
 		input := users.UserDomain{
 			Username: "wafiq",
 			Password: "2123",
@@ -117,6 +115,23 @@ func TestEdit(t *testing.T) {
 		assert.Nil(t, err)
 		assert.Equal(t, userDomain, result)
 	})
+
+	t.Run("Test case 2 - Invalid (Duplicate email)", func(t *testing.T) {
+		mockUserRepository.On("Edit", mock.Anything).Return(userDomain, assert.AnError).Once()
+
+		input := users.UserDomain{
+			ID:       2,
+			Username: "wafiqedited",
+			Email:    "wafiq@monefy.com",
+			Password: "123",
+			Fullname: "rahman wafiq ghazi",
+			Dob:      time.Now(),
+		}
+
+		result, err := userUsecase.Edit(&input)
+		assert.NotNil(t, err)
+		assert.NotEqual(t, userDomain, result)
+	})
 }
 
-//coverage 76%
+//coverage 84.6%
