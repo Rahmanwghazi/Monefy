@@ -47,12 +47,6 @@ func (configJWT *ConfigJWT) GenerateTokenJWT(userId uint) (string, error) {
 	return token, err
 }
 
-func GetUser(echoContext echo.Context) *JwtCustomClaims {
-	user := echoContext.Get("user").(*jwt.Token)
-	claims := user.Claims.(*JwtCustomClaims)
-	return claims
-}
-
 func ExtractClaims(echoContext echo.Context) (*JwtCustomClaims, error) {
 	user := echoContext.Get("user").(*jwt.Token)
 	claims := user.Claims.(*JwtCustomClaims)
