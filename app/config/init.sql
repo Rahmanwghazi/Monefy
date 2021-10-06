@@ -1,0 +1,2 @@
+CREATE DATABASE IF NOT EXIST monefy;
+USE monefy;
