@@ -127,6 +127,7 @@ func TestGetExpensesById(t *testing.T) {
 
 func TestEditExpense(t *testing.T) {
 	t.Run("Test case 1 - Valid", func(t *testing.T) {
+		mockExpenseRepository.On("GetExpenseById", mock.Anything, mock.AnythingOfType("uint")).Return(domainTest, nil).Once()
 		mockExpenseRepository.On("EditExpense", mock.Anything, mock.AnythingOfType("uint")).Return(domainTest, nil).Once()
 		id := uint(1)
 		expense := expenses.ExpenseDomain{
@@ -142,6 +143,7 @@ func TestEditExpense(t *testing.T) {
 	})
 
 	t.Run("Test case 2 - Invalid (Empty field)", func(t *testing.T) {
+		mockExpenseRepository.On("GetExpenseById", mock.Anything, mock.AnythingOfType("uint")).Return(domainTest, assert.AnError).Once()
 		mockExpenseRepository.On("EditExpense", mock.Anything, mock.AnythingOfType("uint")).Return(domainTest, assert.AnError).Once()
 		id := uint(1)
 		expense := expenses.ExpenseDomain{
@@ -183,4 +185,4 @@ func TestDeleteExpense(t *testing.T) {
 	})
 }
 
-//coverage 100.0%
+//coverage 96.0%

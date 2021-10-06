@@ -37,10 +37,15 @@ func (usecase *IncomeUsecase) GetIncomeById(income *IncomeDomain, id uint) (Inco
 }
 
 func (usecase *IncomeUsecase) EditIncome(income *IncomeDomain, id uint) (IncomeDomain, error) {
+	_, getErr := usecase.GetIncomeById(income, id)
+	if getErr != nil {
+		return IncomeDomain{}, getErr
+	}
 	result, err := usecase.Repo.EditIncome(income, id)
 	if err != nil {
 		return IncomeDomain{}, err
 	}
+	result.ID = id
 	return result, nil
 }
 

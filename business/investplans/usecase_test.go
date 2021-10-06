@@ -195,6 +195,7 @@ func TestGetPlanById(t *testing.T) {
 
 func TestEditPlan(t *testing.T) {
 	t.Run("Test case 1 - Valid", func(t *testing.T) {
+		mockPlanRepository.On("GetPlanById", mock.Anything, mock.AnythingOfType("uint")).Return(domainTest, nil).Once()
 		mockProductRepository.On("GetProductByID", mock.AnythingOfType("string")).Return(productDomain, nil).Once()
 		mockPlanRepository.On("EditPlan", mock.Anything, mock.AnythingOfType("uint")).Return(domainTest, nil).Once()
 		id := uint(1)
@@ -214,6 +215,7 @@ func TestEditPlan(t *testing.T) {
 	})
 
 	t.Run("Test case 2 - Invalid (Empty data)", func(t *testing.T) {
+		mockPlanRepository.On("GetPlanById", mock.Anything, mock.AnythingOfType("uint")).Return(domainTest, nil).Once()
 		mockProductRepository.On("GetProductByID", mock.AnythingOfType("string")).Return(productDomain, nil).Once()
 		mockPlanRepository.On("EditPlan", mock.Anything, mock.AnythingOfType("uint")).Return(domainTest, assert.AnError).Once()
 		id := uint(1)
@@ -261,4 +263,4 @@ func TestDeletePlan(t *testing.T) {
 	})
 }
 
-//coverage 91.3%
+//coverage 90.2%

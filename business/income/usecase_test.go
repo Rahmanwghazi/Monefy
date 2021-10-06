@@ -134,6 +134,7 @@ func TestGetincomeById(t *testing.T) {
 
 func TestEditincome(t *testing.T) {
 	t.Run("Test case 1 - Valid", func(t *testing.T) {
+		mockincomeRepository.On("GetIncomeById", mock.Anything, mock.AnythingOfType("uint")).Return(domainTest, nil).Once()
 		mockincomeRepository.On("EditIncome", mock.Anything, mock.AnythingOfType("uint")).Return(domainTest, nil).Once()
 		id := uint(1)
 		income := income.IncomeDomain{
@@ -149,6 +150,7 @@ func TestEditincome(t *testing.T) {
 	})
 
 	t.Run("Test case 2 - Invalid (Empty field)", func(t *testing.T) {
+		mockincomeRepository.On("GetIncomeById", mock.Anything, mock.AnythingOfType("uint")).Return(domainTest, assert.AnError).Once()
 		mockincomeRepository.On("EditIncome", mock.Anything, mock.AnythingOfType("uint")).Return(domainTest, assert.AnError).Once()
 		id := uint(1)
 		income := income.IncomeDomain{

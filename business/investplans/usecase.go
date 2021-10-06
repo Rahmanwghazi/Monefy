@@ -33,7 +33,9 @@ func (usecase *InvestPlanUsecase) Create(idProduct string, domain *InvestPlanDom
 		if err != nil {
 			log.Default().Printf("%+v", err)
 		}
-		domain.Description = string(jsonMarshal)
+		var desc products.ProductDomain
+		json.Unmarshal(jsonMarshal, &desc)
+		domain.Description = "ID: " + strconv.Itoa(desc.Data.Product.ID) + "| Name: " + desc.Data.Product.Name + " | Management: " + desc.Data.Product.Management + " | Custodian: " + desc.Data.Product.Custodian + " | Version: " + desc.Data.Version
 	}
 
 	result, err := usecase.Repo.Create(domain)
@@ -76,6 +78,11 @@ func (usecase *InvestPlanUsecase) GetPlanById(domain *InvestPlanDomain, id uint)
 }
 
 func (usecase *InvestPlanUsecase) EditPlan(domain *InvestPlanDomain, id uint) (InvestPlanDomain, error) {
+	_, getErr := usecase.GetPlanById(domain, id)
+	if getErr != nil {
+		return InvestPlanDomain{}, getErr
+	}
+
 	idProduct := strconv.Itoa(domain.ProductID)
 	product, err := usecase.Product.GetProductByID(idProduct)
 	if strings.TrimSpace(idProduct) != "" {
@@ -86,7 +93,10 @@ func (usecase *InvestPlanUsecase) EditPlan(domain *InvestPlanDomain, id uint) (I
 		if err != nil {
 			log.Default().Printf("%+v", err)
 		}
-		domain.Description = string(jsonMarshal)
+		var desc products.ProductDomain
+		json.Unmarshal(jsonMarshal, &desc)
+		domain.ID = id
+		domain.Description = "ID: " + strconv.Itoa(desc.Data.Product.ID) + "| Name: " + desc.Data.Product.Name + " | Management: " + desc.Data.Product.Management + " | Custodian: " + desc.Data.Product.Custodian + " | Version: " + desc.Data.Version
 	}
 
 	result, err := usecase.Repo.EditPlan(domain, id)

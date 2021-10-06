@@ -37,10 +37,15 @@ func (usecase *ExpenseUsecase) GetExpenseById(expense *ExpenseDomain, id uint) (
 }
 
 func (usecase *ExpenseUsecase) EditExpense(expense *ExpenseDomain, id uint) (ExpenseDomain, error) {
+	_, getErr := usecase.GetExpenseById(expense, id)
+	if getErr != nil {
+		return ExpenseDomain{}, getErr
+	}
 	result, err := usecase.Repo.EditExpense(expense, id)
 	if err != nil {
 		return ExpenseDomain{}, err
 	}
+	expense.ID = id
 	return result, nil
 }
 
