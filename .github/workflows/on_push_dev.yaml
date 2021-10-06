@@ -32,7 +32,7 @@ jobs:
         run: |
           apt-get update
           apt-get install -y mariadb-client
-          mysql --host mysql -uroot -e "CREATE DATABASE IF NOT EXISTS monefy"
+          mysql --host mysql -uroot -ppassword -e "CREATE DATABASE IF NOT EXISTS monefy"
       - name: running unitest
         run: |
           mv ./app/config/docker-config.json ./app/config/config.json

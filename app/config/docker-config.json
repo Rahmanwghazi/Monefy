@@ -1,0 +1,17 @@
+{
+    "debug": false,
+    "server": {
+      "address": ":8080"
+    },
+    "database": {
+      "host": "host.docker.internal",
+      "port": "3306",
+      "user": "root",
+      "pass": "rahmanwghazi",
+      "name": "monefy"
+    },
+    "jwt": {
+      "secret": "s3cret",
+      "expired": 2
+    }
+  }
