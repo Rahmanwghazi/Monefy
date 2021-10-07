@@ -7,7 +7,7 @@ import (
 )
 
 type InvestPlan struct {
-	UserID     uint      `json:"user_id"`
+	UserID     uint
 	ProductID  int       `json:"product_id"`
 	Total      int       `json:"total"`
 	DueDate    time.Time `json:"due_date"`
