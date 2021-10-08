@@ -6,7 +6,6 @@ import (
 	"net/http/httptest"
 	"strings"
 	"testing"
-	"time"
 
 	"github.com/Rahmanwghazi/Monefy/app/presenter"
 	"github.com/Rahmanwghazi/Monefy/app/presenter/users"
@@ -52,31 +51,22 @@ func TestMain(m *testing.M) {
 		"dob"      : "2000-06-01T00:00:00Z"
 	}`
 	userSigninResponse = signin.UserSignin{
-		ID:        1,
-		Username:  "wafiq",
-		Email:     "wafiq@monefy.com",
-		FullName:  "rahman wafiq",
-		DoB:       time.Now(),
-		CreatedAt: time.Now(),
-		UpdatedAt: time.Now(),
+		ID:       1,
+		Username: "wafiq",
+		Email:    "wafiq@monefy.com",
+		FullName: "rahman wafiq",
 	}
 	userSignupResponse = signup.UserSignup{
-		ID:        1,
-		Username:  "wafiq",
-		Email:     "wafiq@monefy.com",
-		Fullname:  "rahman wafiq",
-		DoB:       time.Now(),
-		CreatedAt: time.Now(),
-		UpdatedAt: time.Now(),
+		ID:       1,
+		Username: "wafiq",
+		Email:    "wafiq@monefy.com",
+		Fullname: "rahman wafiq",
 	}
 	userDomain = _user.UserDomain{
-		ID:        1,
-		Username:  "wafiq",
-		Email:     "wafiq@monefy.com",
-		Fullname:  "rahman wafiq",
-		Dob:       time.Now(),
-		CreatedAt: time.Now(),
-		UpdatedAt: time.Now(),
+		ID:       1,
+		Username: "wafiq",
+		Email:    "wafiq@monefy.com",
+		Fullname: "rahman wafiq",
 	}
 	m.Run()
 }
